@@ -1,0 +1,45 @@
+/* PubMed-inspired theme (original look-and-feel inspired, not copied) */
+:root{
+  --content-max:820px;
+  --muted:#6b7280;
+  --link:#0b66c3;
+  --border:#e6e6e6;
+  --heading:#111827;
+  --bg:#ffffff;
+}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--heading);font-family:Inter,system-ui,Arial,Helvetica,sans-serif}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* layout */
+.pm-container{max-width:var(--content-max);margin:28px auto;padding:0 18px}
+header.pm-header{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border)}
+.pm-brand{font-weight:700;font-size:18px}
+.pm-nav{font-size:15px;color:var(--muted)}
+.pm-nav a{margin-left:14px;color:var(--muted)}
+
+/* article */
+.article{margin-top:18px}
+.article h1{font-size:28px;margin:0 0 8px}
+.article .meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.article p{line-height:1.6;color:#111}
+.article .lead{color:var(--muted);font-size:15px}
+
+/* lists and cards */
+.card-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:16px}
+.card{border:1px solid var(--border);padding:14px;border-radius:6px;background:#fff}
+
+/* citations */
+.references{margin-top:22px}
+.references ol{padding-left:1.2em}
+.references li{margin-bottom:8px;color:var(--muted);font-size:14px}
+
+/* small helpers */
+.muted{color:var(--muted)}
+.btn{display:inline-block;padding:8px 12px;background:#f3f4f6;border-radius:6px;border:1px solid var(--border);color:#111}
+
+/* RTL support */
+[dir="rtl"] .pm-container{direction:rtl}
+[dir="rtl"] .pm-nav a{margin-left:0;margin-right:14px}
+
+@media (max-width:700px){.article h1{font-size:22px}.pm-nav{display:none}}

@@ -1,0 +1,23 @@
+# content-map.yml
+# Maps content IDs to per-language paths and basic metadata.
+
+vitamin-d:
+  title:
+    en: "Vitamin D"
+    ru: "Витамин D"
+    he: "ויטמין D"
+  slug: "supplements/vitamins/vitamin-d"
+
+vitamin-c:
+  title:
+    en: "Vitamin C"
+    ru: "Витамин C"
+    he: "ויטמין C"
+  slug: "supplements/vitamins/vitamin-c"
+
+home:
+  title:
+    en: "Home"
+    ru: "Главная"
+    he: "בית"
+  slug: ""
