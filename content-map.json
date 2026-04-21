@@ -1,0 +1,18 @@
+{
+  "vitamin-d": {
+    "slug": "supplements/vitamins/vitamin-d",
+    "title": {"en": "Vitamin D", "ru": "Витамин D", "he": "ויטמין D"}
+  },
+  "vitamin-c": {
+    "slug": "supplements/vitamins/vitamin-c",
+    "title": {"en": "Vitamin C", "ru": "Витамин C", "he": "ויטמין C"}
+  },
+  "magnesium": {
+    "slug": "supplements/vitamins/magnesium",
+    "title": {"en": "Magnesium", "ru": "Магний", "he": "מגנזיום"}
+  },
+  "home": {
+    "slug": "",
+    "title": {"en": "Home", "ru": "Главная", "he": "בית"}
+  }
+}

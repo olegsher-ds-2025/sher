@@ -9,9 +9,18 @@
   <link rel="stylesheet" href="/assets/pubmed-theme.css" />
 </head>
 <body>
-  <header>
-    <a href="/en/">Home</a> • <a href="/en/supplements/">Supplements</a> • <a href="/en/mindfulness/">Mindfulness</a>
-    <span style="float:right"><a href="/">Site (default)</a> • <a href="/ru/">RU</a> • <a href="/he/">HE</a></span>
+  <header class="pm-header">
+    <div class="pm-brand"><a href="/en/">Home</a></div>
+    <nav class="pm-nav">
+      <a href="/en/supplements/">Supplements</a>
+      <a href="/en/supplements/vitamins/">Vitamins</a>
+      <a href="/en/supplements/vitamins/magnesium/">Magnesium</a>
+      <span style="float:right">
+        <a class="lang-switch" data-lang="en">EN</a>
+        <a class="lang-switch" data-lang="ru">RU</a>
+        <a class="lang-switch" data-lang="he">HE</a>
+      </span>
+    </nav>
   </header>
   <main class="pm-container">
     <article class="article">
@@ -22,10 +31,13 @@
       <div class="card-list">
         <div class="card"><a href="/en/supplements/vitamins/vitamin-d/">Vitamin D</a></div>
         <div class="card"><a href="/en/supplements/vitamins/vitamin-c/">Vitamin C</a></div>
+        <div class="card"><a href="/en/supplements/vitamins/magnesium/">Magnesium</a></div>
       </div>
     </article>
   </main>
   <footer style="text-align:center;margin:48px 0;color:#666">© <span id="yr"></span> Sher</footer>
+  <script src="/assets/lang-switch.js"></script>
+  <script src="/assets/linkifier.js"></script>
   <script>document.getElementById('yr').textContent=new Date().getFullYear();</script>
 </body>
 </html>

@@ -48,10 +48,10 @@
 				<a href="#services">Services</a>
 				<a href="#about">About</a>
 				<a href="#contact">Contact</a>
-				<!-- Language switcher -->
-				<a href="/en/">EN</a>
-				<a href="/ru/">RU</a>
-				<a href="/he/">HE</a>
+				<!-- Language switcher (updated by /assets/lang-switch.js) -->
+				<a class="lang-switch" data-lang="en">EN</a>
+				<a class="lang-switch" data-lang="ru">RU</a>
+				<a class="lang-switch" data-lang="he">HE</a>
 			</nav>
 		</header>
 
@@ -113,6 +113,8 @@
 		</footer>
 	</div>
 
+	<script src="/assets/lang-switch.js"></script>
+	<script src="/assets/linkifier.js"></script>
 	<script>
 		// Replace placeholder year
 		document.querySelectorAll('footer div')[0].textContent = '© ' + new Date().getFullYear() + ' Mindfulness Studios — Sher';
