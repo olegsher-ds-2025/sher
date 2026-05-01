@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>שיעור 2 – פחמימות וסוכרים | תזונה טבעית-נבונה</title>
+<link href="https://fonts.googleapis.com/css2?family=Secular+One&family=Heebo:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0b1a;
+    --panel: #16122a;
+    --amber: #f5a623;
+    --amber-dim: rgba(245,166,35,0.15);
+    --amber-border: rgba(245,166,35,0.3);
+    --red: #e84343;
+    --green: #4caf7d;
+    --blue: #4a9eff;
+    --cream: #f0ece0;
+    --muted: rgba(240,236,224,0.55);
+    --card-bg: rgba(255,255,255,0.04);
+    --border: rgba(255,255,255,0.08);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  html, body { margin:0; padding:0; width:100%; height:100%; overflow:hidden; }
+  body { font-family:'Heebo',sans-serif; background:var(--bg,#0d1208); color:var(--cream,#f5f0e8); direction:rtl; }
+
+  #deck { position:relative; width:100%; height:100%; overflow:hidden; }
+  .slide { position:absolute; inset:0; display:none; overflow:hidden; }
+  .slide.active { display:flex; }
+
+
+  /* ── NAV ── */
+  .nav {
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
+    display:flex; align-items:center; gap:14px;
+    background:rgba(14,11,26,0.9); backdrop-filter:blur(14px);
+    border:1px solid var(--amber-border); border-radius:50px;
+    padding:9px 22px; z-index:1000;
+  }
+  .nav button {
+    background:none; border:none; color:var(--amber);
+    font-size:17px; cursor:pointer; padding:4px 10px;
+    border-radius:20px; transition:all .2s;
+  }
+  .nav button:hover { background:var(--amber-dim); }
+  .nav button:disabled { opacity:.25; cursor:default; }
+  .slide-counter { color:var(--muted); font-size:13px; min-width:65px; text-align:center; }
+  .dots { display:flex; gap:5px; }
+  .dot { width:6px; height:6px; border-radius:50%; background:rgba(245,166,35,0.25); cursor:pointer; transition:all .3s; }
+  .dot.active { background:var(--amber); transform:scale(1.5); }
+
+  /* ── SHARED ── */
+  .slide-title {
+    font-family:'Secular One',sans-serif;
+    font-size:clamp(28px,3.8vw,46px);
+    line-height:1.15;
+    margin-bottom:8px;
+  }
+  .slide-sub { font-size:15px; color:var(--muted); margin-bottom:32px; line-height:1.6; }
+  .tag {
+    display:inline-block; font-size:11px; letter-spacing:1.5px;
+    padding:3px 11px; border-radius:20px; font-weight:600;
+    background:var(--amber-dim); color:var(--amber); border:1px solid var(--amber-border);
+    text-transform:uppercase;
+  }
+  .tag.red { background:rgba(232,67,67,.15); color:var(--red); border-color:rgba(232,67,67,.3); }
+  .tag.green { background:rgba(76,175,125,.15); color:var(--green); border-color:rgba(76,175,125,.3); }
+  .tag.blue { background:rgba(74,158,255,.15); color:var(--blue); border-color:rgba(74,158,255,.3); }
+
+  /* ═══════════════════════════════════════
+     SLIDE 1 – TITLE
+  ═══════════════════════════════════════ */
+  .s1 {
+    flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; position:relative;
+    background:radial-gradient(ellipse 90% 70% at 50% 40%, #1e1030 0%, var(--bg) 100%);
+  }
+  .s1-hex {
+    position:absolute; inset:0; overflow:hidden; pointer-events:none; opacity:.07;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 52'%3E%3Cpolygon points='30,2 58,17 58,47 30,62 2,47 2,17' fill='none' stroke='%23f5a623' stroke-width='1'/%3E%3C/svg%3E");
+    background-size:60px 52px;
+  }
+  .s1 .lesson-label { font-size:13px; letter-spacing:4px; color:var(--amber); opacity:.7; margin-bottom:18px; }
+  .s1 h1 { font-family:'Secular One',sans-serif; font-size:clamp(40px,5.5vw,72px); line-height:1.05; color:var(--cream); }
+  .s1 h1 em { color:var(--amber); font-style:normal; }
+  .s1 .s1-sub { font-size:17px; color:var(--muted); margin-top:18px; max-width:600px; }
+  .s1 .s1-pills { display:flex; gap:12px; margin-top:40px; flex-wrap:wrap; justify-content:center; }
+  .s1-pill {
+    padding:8px 20px; border-radius:25px; font-size:14px; font-weight:600;
+    background:var(--amber-dim); border:1px solid var(--amber-border); color:var(--amber);
+  }
+  .s1-warning {
+    position:absolute; bottom:90px; left:50%; transform:translateX(-50%);
+    font-size:14px; color:var(--red); opacity:.7; white-space:nowrap;
+  }
+
+  /* ═══════════════════════════════════════
+     SLIDE 2 – AGENDA
+  ═══════════════════════════════════════ */
+  .s2 { flex-direction:row; }
+  .s2-bar {
+    width:280px; flex-shrink:0;
+    background:linear-gradient(160deg,#1e1030,#0e0b1a);
+    padding:50px 32px; display:flex; flex-direction:column; gap:0;
+    border-left:1px solid var(--border);
+  }
+  .s2-bar h2 { font-family:'Secular One',sans-serif; font-size:30px; color:var(--amber); margin-bottom:10px; }
+  .s2-bar p { font-size:14px; color:var(--muted); line-height:1.6; }
+  .s2-bar .s2-icon { font-size:55px; margin-bottom:18px; }
+  .s2-content { flex:1; padding:50px 55px; display:flex; flex-direction:column; justify-content:center; }
+  .s2-content h3 { font-size:12px; letter-spacing:3px; color:var(--amber); opacity:.6; text-transform:uppercase; margin-bottom:24px; }
+  .ag-item { display:flex; align-items:flex-start; gap:18px; padding:13px 0; border-bottom:1px solid var(--border); }
+  .ag-item:last-child { border:none; }
+  .ag-n { font-family:'Secular One',sans-serif; font-size:26px; color:var(--amber); opacity:.3; min-width:30px; }
+  .ag-text h4 { font-size:16px; font-weight:700; color:var(--cream); margin-bottom:2px; }
+  .ag-text p { font-size:13px; color:var(--muted); }
+
+  /* ═══════════════════════════════════════
+     SLIDE 3 – CARB TYPES
+  ═══════════════════════════════════════ */
+  .s3 { flex-direction:column; padding:50px 70px; justify-content:center; }
+  .s3 .slide-title { color:var(--amber); }
+  .carb-timeline { display:flex; flex-direction:column; gap:14px; position:relative; }
+  .carb-timeline::before {
+    content:''; position:absolute; right:20px; top:25px; bottom:25px;
+    width:2px; background:linear-gradient(to bottom,var(--amber),rgba(245,166,35,.1));
+  }
+  .ct-row { display:flex; gap:20px; align-items:flex-start; }
+  .ct-dot {
+    width:42px; height:42px; border-radius:50%; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px; z-index:1;
+  }
+  .ct-dot.mono { background:rgba(232,67,67,.2); border:2px solid var(--red); }
+  .ct-dot.di   { background:rgba(245,166,35,.2); border:2px solid var(--amber); }
+  .ct-dot.poly { background:rgba(76,175,125,.2); border:2px solid var(--green); }
+  .ct-dot.fiber{ background:rgba(74,158,255,.2); border:2px solid var(--blue); }
+  .ct-body { flex:1; background:var(--card-bg); border:1px solid var(--border); border-radius:10px; padding:16px 20px; }
+  .ct-body h4 { font-size:16px; font-weight:700; margin-bottom:5px; }
+  .ct-body p  { font-size:13px; color:var(--muted); line-height:1.6; }
+  .ct-body .examples { font-size:12px; margin-top:8px; color:var(--amber); }
+  .ct-dot.mono + .ct-body h4 { color:var(--red); }
+  .ct-dot.di   + .ct-body h4 { color:var(--amber); }
+  .ct-dot.poly + .ct-body h4 { color:var(--green); }
+  .ct-dot.fiber+ .ct-body h4 { color:var(--blue); }
+
+  /* ═══════════════════════════════════════
+     SLIDE 4 – GLYCEMIC INDEX FULL
+  ═══════════════════════════════════════ */
+  .s4 {
+    flex-direction:column; padding:50px 70px; justify-content:center;
+    background:linear-gradient(135deg,#0e0b1a 0%,#110d1e 100%);
+  }
+  .s4 .slide-title { color:var(--amber); }
+  .gi-scale { display:flex; height:22px; border-radius:11px; overflow:hidden; margin:20px 0 8px; }
+  .gi-scale .low  { flex:0 0 55%; background:linear-gradient(90deg,#2d7a50,#4caf7d); }
+  .gi-scale .mid  { flex:0 0 15%; background:linear-gradient(90deg,#c8881a,#f5a623); }
+  .gi-scale .high { flex:1; background:linear-gradient(90deg,#b82020,#e84343); }
+  .gi-labels { display:flex; font-size:12px; margin-bottom:28px; }
+  .gi-labels span:nth-child(1) { flex:0 0 55%; color:var(--green); }
+  .gi-labels span:nth-child(2) { flex:0 0 15%; color:var(--amber); }
+  .gi-labels span:nth-child(3) { flex:1; color:var(--red); }
+  .gi-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .gi-card { background:var(--card-bg); border:1px solid var(--border); border-radius:10px; padding:16px; }
+  .gi-card h5 { font-size:13px; font-weight:700; color:var(--muted); margin-bottom:10px; letter-spacing:1px; text-transform:uppercase; }
+  .gi-item { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+  .gi-item .food { font-size:13px; flex:1; }
+  .gi-item .score { font-size:13px; font-weight:700; min-width:28px; text-align:left; }
+  .gi-item .bar { height:7px; background:rgba(255,255,255,.08); border-radius:4px; width:80px; overflow:hidden; }
+  .gi-item .fill { height:100%; border-radius:4px; }
+  .score.low-c,.fill.low-c  { color:var(--green); background:var(--green); }
+  .score.mid-c,.fill.mid-c  { color:var(--amber); background:var(--amber); }
+  .score.high-c,.fill.high-c{ color:var(--red);   background:var(--red); }
+  .gi-note { margin-top:16px; font-size:13px; color:var(--muted); padding:10px 14px; background:var(--card-bg); border-radius:8px; border-right:3px solid var(--amber); }
+
+  /* ═══════════════════════════════════════
+     SLIDE 5 – INSULIN MECHANISM
+  ═══════════════════════════════════════ */
+  .s5 { flex-direction:column; padding:50px 70px; justify-content:center; }
+  .s5 .slide-title { color:#7ec8e3; }
+  .insulin-flow { display:flex; align-items:center; gap:0; margin-bottom:30px; }
+  .ins-step {
+    flex:1; text-align:center; padding:20px 15px;
+    background:var(--card-bg); border:1px solid var(--border); border-radius:12px;
+    position:relative;
+  }
+  .ins-step .step-icon { font-size:32px; margin-bottom:10px; }
+  .ins-step h5 { font-size:14px; font-weight:700; color:#7ec8e3; margin-bottom:6px; }
+  .ins-step p  { font-size:12px; color:var(--muted); line-height:1.5; }
+  .ins-arrow { font-size:22px; color:rgba(126,200,227,.4); flex-shrink:0; padding:0 8px; }
+  .insulin-cards { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .ins-card { padding:18px 22px; border-radius:10px; }
+  .ins-card.normal { background:rgba(76,175,125,.08); border:1px solid rgba(76,175,125,.2); }
+  .ins-card.resist  { background:rgba(232,67,67,.08); border:1px solid rgba(232,67,67,.2); }
+  .ins-card h5 { font-size:15px; font-weight:700; margin-bottom:10px; }
+  .ins-card.normal h5 { color:var(--green); }
+  .ins-card.resist  h5 { color:var(--red); }
+  .ins-card ul { padding-right:18px; }
+  .ins-card ul li { font-size:13px; color:var(--muted); margin-bottom:5px; line-height:1.5; }
+
+  /* ═══════════════════════════════════════
+     SLIDE 6 – NATURAL SUGARS
+  ═══════════════════════════════════════ */
+  .s6 {
+    flex-direction:row;
+    background:linear-gradient(135deg,#0a150a,#0e1a0e);
+  }
+  .s6 .left { flex:1; padding:50px; display:flex; flex-direction:column; justify-content:center; }
+  .s6 .slide-title { color:#7ed87e; }
+  .s6 .right {
+    width:310px; padding:50px 35px; display:flex; flex-direction:column; justify-content:center;
+    border-right:1px solid rgba(126,216,126,.1);
+    background:rgba(126,216,126,.03);
+  }
+  .nat-card {
+    margin-bottom:14px; padding:16px 20px;
+    background:rgba(255,255,255,.04); border-radius:10px;
+    border-right:3px solid;
+  }
+  .nat-card.fruit   { border-color:#7ed87e; }
+  .nat-card.dairy   { border-color:#a0c4ff; }
+  .nat-card.honey   { border-color:var(--amber); }
+  .nat-card.grain   { border-color:#d4a870; }
+  .nat-card h5 { font-size:15px; font-weight:700; color:var(--cream); margin-bottom:5px; }
+  .nat-card p  { font-size:13px; color:var(--muted); line-height:1.5; }
+  .nat-card .badge { font-size:11px; margin-top:7px; }
+  .why-natural h4 { font-family:'Secular One',sans-serif; font-size:18px; color:#7ed87e; margin-bottom:16px; }
+  .why-item { display:flex; gap:12px; margin-bottom:12px; align-items:flex-start; }
+  .why-item .ico { font-size:20px; flex-shrink:0; }
+  .why-item p { font-size:13px; color:var(--muted); line-height:1.5; }
+
+  /* ═══════════════════════════════════════
+     SLIDE 7 – ADDED/ARTIFICIAL SUGARS
+  ═══════════════════════════════════════ */
+  .s7 { flex-direction:column; padding:50px 70px; justify-content:center; background:#14040a; }
+  .s7 .slide-title { color:var(--red); }
+  .added-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  .add-card { padding:22px; border-radius:12px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); }
+  .add-card h5 { font-size:16px; font-weight:700; margin-bottom:10px; }
+  .add-card p  { font-size:13px; color:var(--muted); line-height:1.6; }
+  .add-card .who-limit { margin-top:12px; padding:10px 14px; background:rgba(232,67,67,.1); border-radius:8px; font-size:13px; color:var(--red); }
+  .hidden-names { margin-top:6px; }
+  .hidden-names .hn-title { font-size:12px; color:var(--muted); margin-bottom:8px; }
+  .sugar-chips { display:flex; flex-wrap:wrap; gap:6px; }
+  .s-chip {
+    font-size:11px; padding:3px 10px; border-radius:12px;
+    background:rgba(232,67,67,.12); color:#ff9090; border:1px solid rgba(232,67,67,.2);
+  }
+  .artificial-row { display:flex; gap:14px; margin-top:18px; }
+  .art-card { flex:1; padding:16px; background:rgba(255,255,255,.03); border-radius:10px; border:1px solid var(--border); }
+  .art-card .art-name { font-size:14px; font-weight:700; color:var(--amber); margin-bottom:5px; }
+  .art-card p { font-size:12px; color:var(--muted); line-height:1.5; }
+  .art-card .sweetness { font-size:11px; color:var(--muted); margin-top:5px; }
+
+  /* ═══════════════════════════════════════
+     SLIDE 8 – DIETARY FIBER
+  ═══════════════════════════════════════ */
+  .s8 { flex-direction:row; }
+  .s8 .left { flex:1; padding:50px; display:flex; flex-direction:column; justify-content:center; }
+  .s8 .slide-title { color:var(--blue); }
+  .s8 .right { width:300px; padding:50px 35px; display:flex; flex-direction:column; justify-content:center; background:rgba(74,158,255,.04); border-right:1px solid rgba(74,158,255,.1); }
+  .fiber-compare { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:0; }
+  .fib-card { padding:18px; border-radius:10px; }
+  .fib-card.sol  { background:rgba(76,175,125,.08); border:1px solid rgba(76,175,125,.2); }
+  .fib-card.insol{ background:rgba(74,158,255,.08); border:1px solid rgba(74,158,255,.2); }
+  .fib-card h5   { font-size:15px; font-weight:700; margin-bottom:8px; }
+  .fib-card.sol  h5 { color:var(--green); }
+  .fib-card.insol h5 { color:var(--blue); }
+  .fib-card ul   { padding-right:16px; }
+  .fib-card ul li { font-size:13px; color:var(--muted); margin-bottom:4px; line-height:1.5; }
+  .fiber-rda h4  { font-family:'Secular One',sans-serif; font-size:18px; color:var(--blue); margin-bottom:16px; }
+  .rda-item { margin-bottom:14px; }
+  .rda-item .rda-label { display:flex; justify-content:space-between; font-size:13px; margin-bottom:5px; }
+  .rda-item .rda-label span:last-child { color:var(--blue); font-weight:700; }
+  .rda-bar { height:10px; background:rgba(255,255,255,.08); border-radius:5px; overflow:hidden; }
+  .rda-fill { height:100%; border-radius:5px; background:linear-gradient(90deg,var(--blue),#80c0ff); }
+  .fiber-tip { margin-top:18px; padding:14px; background:rgba(74,158,255,.08); border-radius:8px; font-size:13px; color:var(--muted); line-height:1.6; border-right:3px solid var(--blue); }
+
+  /* ═══════════════════════════════════════
+     SLIDE 9 – METABOLIC SYNDROME
+  ═══════════════════════════════════════ */
+  .s9 { flex-direction:column; padding:50px 70px; justify-content:center; background:#130a0a; }
+  .s9 .slide-title { color:var(--red); }
+  .ms-criteria {
+    display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-bottom:22px;
+  }
+  .ms-c { background:rgba(232,67,67,.08); border:1px solid rgba(232,67,67,.2); border-radius:10px; padding:16px 12px; text-align:center; }
+  .ms-c .mc-icon { font-size:28px; margin-bottom:8px; }
+  .ms-c h5 { font-size:13px; font-weight:700; color:var(--red); margin-bottom:5px; line-height:1.3; }
+  .ms-c p  { font-size:11px; color:var(--muted); line-height:1.4; }
+  .ms-path { display:flex; gap:12px; align-items:stretch; }
+  .ms-path-step { flex:1; padding:16px 18px; background:var(--card-bg); border:1px solid var(--border); border-radius:10px; }
+  .ms-path-step h5 { font-size:14px; font-weight:700; color:var(--amber); margin-bottom:6px; }
+  .ms-path-step p  { font-size:12px; color:var(--muted); line-height:1.5; }
+  .ms-arr { font-size:20px; color:rgba(232,67,67,.4); align-self:center; flex-shrink:0; }
+  .ms-note { margin-top:16px; padding:12px 16px; background:rgba(76,175,125,.08); border-radius:8px; font-size:13px; color:var(--green); border-right:3px solid var(--green); }
+
+  /* ═══════════════════════════════════════
+     SLIDE 10 – FRUCTOSE DEBATE
+  ═══════════════════════════════════════ */
+  .s10 { flex-direction:column; padding:50px 70px; justify-content:center; }
+  .s10 .slide-title { color:var(--amber); }
+  .fruct-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
+  .fruct-card { padding:22px; border-radius:12px; }
+  .fruct-card.natural { background:rgba(76,175,125,.08); border:1px solid rgba(76,175,125,.2); }
+  .fruct-card.hfcs    { background:rgba(232,67,67,.08); border:1px solid rgba(232,67,67,.2); }
+  .fruct-card h5 { font-size:17px; font-weight:700; margin-bottom:12px; }
+  .fruct-card.natural h5 { color:var(--green); }
+  .fruct-card.hfcs    h5 { color:var(--red); }
+  .fruct-card ul { padding-right:18px; }
+  .fruct-card ul li { font-size:13px; color:var(--muted); margin-bottom:6px; line-height:1.5; }
+  .hfcs-banner { padding:14px 18px; background:rgba(232,67,67,.07); border-radius:10px; border:1px solid rgba(232,67,67,.15); font-size:13px; color:var(--muted); line-height:1.6; }
+  .hfcs-banner strong { color:var(--red); }
+
+  /* ═══════════════════════════════════════
+     SLIDE 11 – LOW CARB VS HIGH CARB
+  ═══════════════════════════════════════ */
+  .s11 { flex-direction:column; padding:50px 70px; justify-content:center; }
+  .s11 .slide-title { color:var(--cream); }
+  .diet-compare { display:grid; grid-template-columns:1fr 80px 1fr; gap:0; align-items:start; }
+  .dc-col h4 { font-size:17px; font-weight:700; padding-bottom:12px; border-bottom:2px solid; margin-bottom:18px; }
+  .dc-col.low h4  { color:var(--amber); border-color:var(--amber); }
+  .dc-col.high h4 { color:var(--blue);  border-color:var(--blue); }
+  .dc-point { display:flex; gap:10px; margin-bottom:10px; font-size:13px; color:var(--muted); line-height:1.5; }
+  .dc-vs { display:flex; align-items:center; justify-content:center; }
+  .vs-ball {
+    width:55px; height:55px; border-radius:50%;
+    background:var(--card-bg); border:2px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Secular One',sans-serif; font-size:18px; color:var(--cream);
+  }
+  .dc-verdict { margin-top:22px; padding:14px 18px; background:var(--card-bg); border-radius:10px; border-right:3px solid var(--amber); font-size:13px; color:var(--muted); line-height:1.6; }
+  .dc-verdict strong { color:var(--amber); }
+
+  /* ═══════════════════════════════════════
+     SLIDE 12 – WHOLE GRAINS
+  ═══════════════════════════════════════ */
+  .s12 {
+    flex-direction:column; padding:50px 70px; justify-content:center;
+    background:linear-gradient(160deg,#0e0b0a,#180e05);
+  }
+  .s12 .slide-title { color:#d4a870; }
+  .grain-anatomy { display:flex; gap:30px; align-items:center; margin-bottom:28px; }
+  .grain-svg-wrap { flex-shrink:0; }
+  .grain-parts { flex:1; display:flex; flex-direction:column; gap:12px; }
+  .gp { padding:14px 18px; border-radius:9px; background:var(--card-bg); border-right:3px solid; }
+  .gp.bran  { border-color:#8B6240; }
+  .gp.germ  { border-color:#c8a84b; }
+  .gp.endo  { border-color:rgba(255,255,255,.3); }
+  .gp h5 { font-size:14px; font-weight:700; margin-bottom:4px; }
+  .gp.bran  h5 { color:#c8a870; }
+  .gp.germ  h5 { color:#e0c060; }
+  .gp.endo  h5 { color:rgba(255,255,255,.6); }
+  .gp p { font-size:12px; color:var(--muted); }
+  .grain-list { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+  .grain-item { padding:14px; text-align:center; background:rgba(212,168,112,.08); border:1px solid rgba(212,168,112,.15); border-radius:9px; }
+  .grain-item .gi-ico { font-size:26px; margin-bottom:6px; }
+  .grain-item h5 { font-size:13px; font-weight:700; color:#d4a870; margin-bottom:3px; }
+  .grain-item p  { font-size:11px; color:var(--muted); }
+
+  /* ═══════════════════════════════════════
+     SLIDE 13 – READING SUGAR ON LABELS
+  ═══════════════════════════════════════ */
+  .s13 { flex-direction:row; background:#12080e; }
+  .s13 .left { flex:1; padding:50px; display:flex; flex-direction:column; justify-content:center; }
+  .s13 .slide-title { color:var(--amber); }
+  .label-tips-s13 { display:flex; flex-direction:column; gap:12px; }
+  .lt { display:flex; gap:14px; align-items:flex-start; padding:14px 18px; background:var(--card-bg); border-radius:10px; border-right:3px solid var(--amber); }
+  .lt .lt-ico { font-size:22px; flex-shrink:0; }
+  .lt h5 { font-size:14px; font-weight:700; color:var(--amber); margin-bottom:3px; }
+  .lt p  { font-size:13px; color:var(--muted); line-height:1.5; }
+  .s13 .right { width:300px; padding:50px 35px; display:flex; flex-direction:column; justify-content:center; background:rgba(245,166,35,.04); border-right:1px solid rgba(245,166,35,.1); }
+  .sugar-names h4 { font-family:'Secular One',sans-serif; font-size:18px; color:var(--amber); margin-bottom:14px; }
+  .sn-chip { display:inline-block; margin:4px; padding:4px 12px; border-radius:14px; font-size:12px; background:rgba(232,67,67,.1); color:#ff9090; border:1px solid rgba(232,67,67,.2); }
+  .sn-note { margin-top:14px; font-size:12px; color:var(--muted); line-height:1.6; padding:10px; background:var(--card-bg); border-radius:8px; }
+
+  /* ═══════════════════════════════════════
+     SLIDE 14 – QUIZ
+  ═══════════════════════════════════════ */
+  .s14 {
+    flex-direction:column; align-items:center; justify-content:center;
+    padding:50px 80px; text-align:center;
+    background:radial-gradient(ellipse 80% 60% at 50% 50%, #1e1030, var(--bg));
+  }
+  .s14 .slide-title { color:var(--amber); margin-bottom:10px; }
+  .s14 .slide-sub   { margin-bottom:35px; }
+  .quiz-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; width:100%; max-width:800px; }
+  .qc {
+    background:var(--card-bg); border:1px solid var(--border);
+    border-radius:12px; padding:22px; cursor:pointer; transition:all .3s; text-align:right;
+  }
+  .qc:hover { background:rgba(255,255,255,.07); transform:translateY(-2px); }
+  .qc.revealed { background:var(--amber-dim); border-color:var(--amber-border); }
+  .qc .qn { font-size:11px; color:var(--muted); margin-bottom:8px; }
+  .qc .qt { font-size:15px; color:var(--cream); font-weight:600; }
+  .qc .qa { margin-top:10px; font-size:13px; color:rgba(245,208,112,.9); display:none; line-height:1.6; }
+  .qc.revealed .qa { display:block; }
+  .quiz-hint { margin-top:14px; font-size:12px; color:rgba(255,255,255,.25); }
+
+  /* ═══════════════════════════════════════
+     SLIDE 15 – SUMMARY
+  ═══════════════════════════════════════ */
+  .s15 {
+    flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:50px 80px; position:relative;
+  }
+  .s15::before {
+    content:''; position:absolute; inset:0;
+    background:radial-gradient(ellipse 70% 50% at 50% 50%, rgba(245,166,35,.12), transparent 70%);
+  }
+  .s15 .slide-title { color:var(--amber); position:relative; margin-bottom:8px; }
+  .s15 .slide-sub   { position:relative; margin-bottom:38px; }
+  .sum-grid {
+    display:grid; grid-template-columns:repeat(3,1fr); gap:14px;
+    width:100%; max-width:860px; position:relative;
+  }
+  .si {
+    background:var(--card-bg); border:1px solid var(--border);
+    border-radius:10px; padding:20px; text-align:right;
+  }
+  .si .si-ico { font-size:26px; margin-bottom:9px; }
+  .si h5 { font-size:15px; font-weight:700; color:var(--amber); margin-bottom:5px; }
+  .si p  { font-size:13px; color:var(--muted); line-height:1.5; }
+  .next-box {
+    margin-top:28px; padding:14px 28px; position:relative;
+    background:var(--amber-dim); border:1px solid var(--amber-border); border-radius:10px;
+    font-size:14px; color:var(--amber);
+  }
+  .next-box strong { color:var(--cream); }
+</style>
+</head>
+<body>
+
+<!-- ════════════ SLIDE 1 – TITLE ════════════ -->
+<div id="deck">
+<div class="slide s1 active">
+  <div class="s1-hex"></div>
+  <div class="lesson-label">תזונה טבעית-נבונה • שיעור 2 מתוך 20</div>
+  <h1>פחמימות <em>&</em> סוכרים<br>מה שכולם חושבים<br>שהם יודעים</h1>
+  <div class="s1-sub">מהמולקולה הפשוטה ביותר ועד לאפידמיית הסוכרת — המדע המלא</div>
+  <div class="s1-pills">
+    <span class="s1-pill">🍬 סוכרים טבעיים vs. מלאכותיים</span>
+    <span class="s1-pill">📈 מדד גליקמי ואינסולין</span>
+    <span class="s1-pill">🫘 סיבים תזונתיים</span>
+    <span class="s1-pill">⚠️ תסמונת מטבולית</span>
+  </div>
+  <div class="s1-warning">⚠️ ממוצע צריכת סוכר מוסף בישראל: ~20 כפיות ביום (פי 4 מהמומלץ)</div>
+</div>
+
+<!-- ════════════ SLIDE 2 – AGENDA ════════════ -->
+<div class="slide s2">
+  <div class="s2-bar">
+    <div class="s2-icon">🍯</div>
+    <h2>תוכן השיעור</h2>
+    <p>שיעור 2 בונה על הבסיס של שיעור 1 ומעמיק בעולם הפחמימות</p>
+  </div>
+  <div class="s2-content">
+    <h3>סדר יום</h3>
+    <div class="ag-item"><div class="ag-n">01</div><div class="ag-text"><h4>סוגי פחמימות — סקירה מפורטת</h4><p>מונו, די, פולי, סיבים — כימיה ותפקידים</p></div></div>
+    <div class="ag-item"><div class="ag-n">02</div><div class="ag-text"><h4>מדד גליקמי ועומס גליקמי</h4><p>GI, GL — מה הגוף באמת "מרגיש"</p></div></div>
+    <div class="ag-item"><div class="ag-n">03</div><div class="ag-text"><h4>אינסולין ותנגודת לאינסולין</h4><p>מנגנון ההורמון, מה קורה כשהוא נכשל</p></div></div>
+    <div class="ag-item"><div class="ag-n">04</div><div class="ag-text"><h4>סוכרים טבעיים מול מוספים</h4><p>פרוקטוז, HFCS, ממתיקים מלאכותיים</p></div></div>
+    <div class="ag-item"><div class="ag-n">05</div><div class="ag-text"><h4>סיבים תזונתיים לעומק</h4><p>מסיסים, בלתי-מסיסים, מיקרוביום</p></div></div>
+    <div class="ag-item"><div class="ag-n">06</div><div class="ag-text"><h4>תסמונת מטבולית וסוכרת</h4><p>קריטריונים, פתופיזיולוגיה, מניעה</p></div></div>
+    <div class="ag-item"><div class="ag-n">07</div><div class="ag-text"><h4>Low-Carb vs High-Carb — הוויכוח</h4><p>מה אומרת הראיה המדעית</p></div></div>
+  </div>
+</div>
+
+<!-- ════════════ SLIDE 3 – CARB TYPES ════════════ -->
+<div class="slide s3">
+  <div class="slide-title">סוגי הפחמימות</div>
+  <div class="slide-sub">ממולקולה אחת ועד שרשרת ארוכה — מבנה קובע תפקוד</div>
+  <div class="carb-timeline">
+    <div class="ct-row">
+      <div class="ct-dot mono">🔴</div>
+      <div class="ct-body">
+        <h4>מונוסכרידים — חד-סוכרים</h4>
+        <p>יחידת הבסיס. גלוקוז (C₆H₁₂O₆) — דלק ישיר לתאים ולמוח. פרוקטוז — בפירות, מטוּבָּל בכבד. גלקטוז — בחלב, הופך לגלוקוז בכבד.</p>
+        <div class="examples">📌 גלוקוז, פרוקטוז, גלקטוז</div>
+      </div>
+    </div>
+    <div class="ct-row">
+      <div class="ct-dot di">🟡</div>
+      <div class="ct-body">
+        <h4>דיסכרידים — דו-סוכרים</h4>
+        <p>שני מונוסכרידים מחוברים. סוכרוז (שולחן) = גלוקוז+פרוקטוז. לקטוז (חלב) = גלוקוז+גלקטוז. מלטוז (נבטים, בירה) = גלוקוז+גלוקוז. אנזים ספציפי מפרק כל אחד.</p>
+        <div class="examples">📌 סוכרוז, לקטוז, מלטוז</div>
+      </div>
+    </div>
+    <div class="ct-row">
+      <div class="ct-dot poly">🟢</div>
+      <div class="ct-body">
+        <h4>פוליסכרידים — רב-סוכרים (עמילן)</h4>
+        <p>שרשראות ארוכות של גלוקוז. עמילוז (שרשרת ישרה) ועמילופקטין (מסועף) — מורידים GI. גליקוגן — אחסון גלוקוז בשריר/כבד, עד ~400 גרם.</p>
+        <div class="examples">📌 עמילן, גליקוגן, קינואה, קטניות</div>
+      </div>
+    </div>
+    <div class="ct-row">
+      <div class="ct-dot fiber">💙</div>
+      <div class="ct-body">
+        <h4>סיבים תזונתיים</h4>
+        <p>פוליסכרידים שהאנזימים שלנו אינם מפרקים. מגיעים למעי הגס שלמים → מזון לחיידקי המיקרוביום (פרה-ביוטיקה). חיוניים לבריאות, אך 80% מהאוכלוסייה צורכת פחות מהמומלץ.</p>
+        <div class="examples">📌 פקטין, בטא-גלוקן, אינולין, צלולוז</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ SLIDE 4 – GI / GL ════════════ -->
+<div class="slide s4">
+  <div class="slide-title">מדד גליקמי (GI) ועומס גליקמי (GL)</div>
+  <div class="slide-sub">GI בודק מהירות עלייה בסוכר דם • GL מחשב גם את כמות הפחמימות במנה</div>
+  <div class="gi-scale"><div class="low"></div><div class="mid"></div><div class="high"></div></div>
+  <div class="gi-labels"><span>נמוך &lt;55</span><span>בינוני 56–69</span><span>גבוה ≥70</span></div>
+  <div class="gi-grid">
+    <div class="gi-card">
+      <h5>🟢 GI נמוך</h5>
+      <div class="gi-item"><span class="food">עדשים מבושלות</span><span class="score low-c">32</span><div class="bar"><div class="fill low-c" style="width:32%"></div></div></div>
+      <div class="gi-item"><span class="food">חומוס</span><span class="score low-c">28</span><div class="bar"><div class="fill low-c" style="width:28%"></div></div></div>
+      <div class="gi-item"><span class="food">פסטה (al dente)</span><span class="score low-c">45</span><div class="bar"><div class="fill low-c" style="width:45%"></div></div></div>
+      <div class="gi-item"><span class="food">תפוח</span><span class="score low-c">36</span><div class="bar"><div class="fill low-c" style="width:36%"></div></div></div>
+    </div>
+    <div class="gi-card">
+      <h5>🟡 GI בינוני</h5>
+      <div class="gi-item"><span class="food">לחם שיפון מלא</span><span class="score mid-c">58</span><div class="bar"><div class="fill mid-c" style="width:58%"></div></div></div>
+      <div class="gi-item"><span class="food">אורז בסמטי</span><span class="score mid-c">58</span><div class="bar"><div class="fill mid-c" style="width:58%"></div></div></div>
+      <div class="gi-item"><span class="food">תמרים</span><span class="score mid-c">42</span><div class="bar"><div class="fill mid-c" style="width:42%"></div></div></div>
+      <div class="gi-item"><span class="food">דלעת אפויה</span><span class="score mid-c">64</span><div class="bar"><div class="fill mid-c" style="width:64%"></div></div></div>
+    </div>
+    <div class="gi-card">
+      <h5>🔴 GI גבוה</h5>
+      <div class="gi-item"><span class="food">לחם לבן</span><span class="score high-c">75</span><div class="bar"><div class="fill high-c" style="width:75%"></div></div></div>
+      <div class="gi-item"><span class="food">אורז לבן</span><span class="score high-c">72</span><div class="bar"><div class="fill high-c" style="width:72%"></div></div></div>
+      <div class="gi-item"><span class="food">קורנפלקס</span><span class="score high-c">81</span><div class="bar"><div class="fill high-c" style="width:81%"></div></div></div>
+      <div class="gi-item"><span class="food">אבטיח</span><span class="score high-c">72</span><div class="bar"><div class="fill high-c" style="width:72%"></div></div></div>
+    </div>
+  </div>
+  <div class="gi-note">💡 <strong>GL = GI × גרמי פחמימות ÷ 100</strong> — אבטיח GI=72 אך GL=4 (מנה קטנה, מעט פחמימות). GL נמוך מ-10 = בסדר; גבוה מ-20 = גבוה.</div>
+</div>
+
+<!-- ════════════ SLIDE 5 – INSULIN ════════════ -->
+<div class="slide s5">
+  <div class="slide-title">אינסולין — מפתח הסוכר</div>
+  <div class="slide-sub">הורמון פנקראטי שמאפשר לגלוקוז להיכנס לתאים · מה קורה כשהמנגנון נשבר?</div>
+  <div class="insulin-flow">
+    <div class="ins-step"><div class="step-icon">🍞</div><h5>אכילת פחמימות</h5><p>גלוקוז עולה בדם</p></div>
+    <div class="ins-arrow">←</div>
+    <div class="ins-step"><div class="step-icon">🫀</div><h5>הלבלב מגיב</h5><p>תאי β מפרישים אינסולין</p></div>
+    <div class="ins-arrow">←</div>
+    <div class="ins-step"><div class="step-icon">🔑</div><h5>אינסולין כ"מפתח"</h5><p>נקשר לרצפטורים על תאי שריר/שומן/כבד</p></div>
+    <div class="ins-arrow">←</div>
+    <div class="ins-step"><div class="step-icon">⚡</div><h5>גלוקוז נכנס</h5><p>לתאים לאנרגיה, לכבד לגליקוגן, לשומן לאחסון</p></div>
+  </div>
+  <div class="insulin-cards">
+    <div class="ins-card normal">
+      <h5>✅ רגישות תקינה לאינסולין</h5>
+      <ul>
+        <li>כמות קטנה של אינסולין מספיקה</li>
+        <li>גלוקוז בדם חוזר לנורמה תוך ~2 שעות</li>
+        <li>תאי השריר קולטים גלוקוז ביעילות</li>
+        <li>שומן בטני מוגבל</li>
+      </ul>
+    </div>
+    <div class="ins-card resist">
+      <h5>⚠️ תנגודת לאינסולין (IR)</h5>
+      <ul>
+        <li>התאים "מתעלמים" מהאינסולין → הלבלב מייצר יותר</li>
+        <li>רמות גלוקוז ואינסולין גבוהות בו-זמנית</li>
+        <li>גלוקוז עודף הופך לשומן בכבד (NAFLD)</li>
+        <li>שלב קדם-סוכרתי → סוכרת סוג 2 אם לא מטפלים</li>
+        <li>קשור: השמנה בטנית, HFCS, אורח חיים יושבני</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ SLIDE 6 – NATURAL SUGARS ════════════ -->
+<div class="slide s6">
+  <div class="left">
+    <div class="slide-title">סוכרים טבעיים</div>
+    <div class="slide-sub">הופיעו בתזונה האנושית מאות אלפי שנים — הגוף מכיר אותם</div>
+    <div class="nat-card fruit">
+      <h5>🍎 פרוקטוז בפירות</h5>
+      <p>מגיע עם סיבים, ויטמינים ופיטוכימיקלים. הסיבים מאטים ספיגה ומפחיתים עומס גליקמי. ממוצע 2-3 מנות פרי = בטוח לחלוטין.</p>
+      <span class="tag green badge">מומלץ ✓</span>
+    </div>
+    <div class="nat-card dairy">
+      <h5>🥛 לקטוז בחלב</h5>
+      <p>דיסכריד גלוקוז+גלקטוז. אינטולרנס ללקטוז — חסר אנזים לקטאז. שכיח יותר באסיה ובאפריקה. יוגורט — חיידקים מפרקים לקטוז חלקית.</p>
+      <span class="tag blue badge">בינוני</span>
+    </div>
+    <div class="nat-card honey">
+      <h5>🍯 דבש ומייפל</h5>
+      <p>בעיקר פרוקטוז וגלוקוז. דבש מכיל מעט נוגדי חמצון ופוליפנולים. GI ~58. יש לצרוך במתינות — עדיין סוכר מבחינת הגוף.</p>
+      <span class="tag badge">במתינות</span>
+    </div>
+    <div class="nat-card grain">
+      <h5>🌾 עמילן בדגנים מלאים</h5>
+      <p>שחרור איטי של גלוקוז. ה-"סוכר" שהגוף אוהב. שיבולת שועל, שעורה, כוסמת — GI נמוך, עשיר בסיבים ב-גלוקן.</p>
+      <span class="tag green badge">מועדף ✓</span>
+    </div>
+  </div>
+  <div class="right">
+    <div class="why-natural">
+      <h4>מדוע "טבעי" שונה?</h4>
+      <div class="why-item"><div class="ico">🧱</div><p><strong>מטריצה מזונית:</strong> הסוכר "כלוא" בתוך תאי הצמח — הגוף צריך לעבוד כדי לשחרר אותו.</p></div>
+      <div class="why-item"><div class="ico">🐌</div><p><strong>ספיגה איטית:</strong> סיבים + תאי צמח = עלייה הדרגתית בגלוקוז, לא "ספייק" חד.</p></div>
+      <div class="why-item"><div class="ico">🧪</div><p><strong>חבילה שלמה:</strong> ויטמינים, מינרלים, נוגדי חמצון — לא סוכר "ערום".</p></div>
+      <div class="why-item"><div class="ico">📊</div><p><strong>מחקרים:</strong> צריכת פירות קשורה להפחתת סיכון לסוכרת, לא להגברתו.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ SLIDE 7 – ADDED SUGARS ════════════ -->
+<div class="slide s7">
+  <div class="slide-title">סוכרים מוספים וממתיקים מלאכותיים</div>
+  <div class="slide-sub">הגוף לא "ראה" אותם בסביבתו האבולוציונית — לפחות לא בכמויות הנוכחיות</div>
+  <div class="added-grid">
+    <div class="add-card">
+      <h5 style="color:var(--red)">⚠️ סוכר מוסף</h5>
+      <p>סוכרוז ו-HFCS (High Fructose Corn Syrup) מתווספים לאלפי מוצרים. אין ערך תזונתי מלבד קלוריות. קשורים להשמנה, NAFLD, מחלות לב, סרטן.</p>
+      <div class="who-limit">🩺 WHO ממליצה: פחות מ-25 גרם סוכר מוסף ביום (~6 כפיות)</div>
+      <div class="hidden-names" style="margin-top:12px">
+        <div class="hn-title">שמות נסתרים של סוכר בתוויות:</div>
+        <div class="sugar-chips">
+          <span class="s-chip">סירופ תירס</span><span class="s-chip">מלטוז</span><span class="s-chip">דקסטרוז</span><span class="s-chip">שרבט אגבה</span><span class="s-chip">מולסה</span><span class="s-chip">סוכר קנה</span>
+        </div>
+      </div>
+    </div>
+    <div class="add-card">
+      <h5 style="color:var(--amber)">🧪 HFCS — סירופ גלוקוז-פרוקטוז</h5>
+      <p>מיוצר מתירס, זול ומתוק מסוכר רגיל. תעשיית המזון מוסיפה אותו לכל דבר. <strong>הפרוקטוז ב-HFCS:</strong> מטוּבָּל ישירות בכבד (בלי תחנת ביניים) → שומן כבד, טריגליצרידים, חומצת שתן.</p>
+      <p style="margin-top:10px;font-size:12px;color:var(--muted)">📚 Robert Lustig (UCSF): "Sugar: The Bitter Truth" — פרוקטוז מוסף = אלכוהול ללא השכרות</p>
+    </div>
+  </div>
+  <div class="artificial-row">
+    <div class="art-card"><div class="art-name">אספרטיים (E951)</div><p>200× מתוק מסוכר. מחלוקת — IARC 2023: ייתכן מסרטן. FDA: בטוח בכמויות ADI.</p><div class="sweetness">בד"כ בדיאט קולה, מסטיק</div></div>
+    <div class="art-card"><div class="art-name">סוכרלוז (E955)</div><p>600× מתוק. יציב בחום. שינויי מיקרוביום בחיות מעבדה — עדיין נחקר.</p><div class="sweetness">Splenda, מאפים</div></div>
+    <div class="art-card"><div class="art-name">סטיביה</div><p>ממקור צמחי — עלה סטיביה. אפס קלוריות, GI=0. נחשב הבטוח מכולם.</p><div class="sweetness">300× מתוק מסוכר</div></div>
+    <div class="art-card"><div class="art-name">אריתריטול</div><p>סוכר אלכוהול, נספג חלקית. 0.2 קל/ג'. מחקר 2023: קשר לאירועים קרדיווסקולריים? נחקר.</p><div class="sweetness">Truvia, מוצרי קטו</div></div>
+  </div>
+</div>
+
+<!-- ════════════ SLIDE 8 – FIBER ════════════ -->
+<div class="slide s8">
+  <div class="left">
+    <div class="slide-title">סיבים תזונתיים — הגיבור השקט</div>
+    <div class="slide-sub">לא נספגים, לא מספקים קלוריות — אבל חיוניים לבריאות המעי ולכל הגוף</div>
+    <div class="fiber-compare">
+      <div class="fib-card sol">
+        <h5>💧 סיבים מסיסים</h5>
+        <ul>
+          <li>מתמוססים במים → ג'ל צמיג</li>
+          <li>מאטים ספיגת גלוקוז וכולסטרול</li>
+          <li>מזון לחיידקי המיקרוביום</li>
+          <li>מוריד LDL (בטא-גלוקן)</li>
+          <li>📌 שיבולת שועל, תפוח, פסיליום, קטניות</li>
+        </ul>
+      </div>
+      <div class="fib-card insol">
+        <h5>🌾 סיבים בלתי-מסיסים</h5>
+        <ul>
+          <li>מגבירים נפח ומשקל הצואה</li>
+          <li>מזרזים מעבר מעיים — מניעת עצירות</li>
+          <li>מפחיתים סיכון לסרטן המעי הגס</li>
+          <li>אינם מתסססים — לא גורמים לגזים</li>
+          <li>📌 סובין חיטה, ירקות, קליפות דגנים</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="right">
+    <div class="fiber-rda">
+      <h4>כמה סיבים אנחנו צריכים?</h4>
+      <div class="rda-item">
+        <div class="rda-label"><span>נשים (19–50)</span><span>25 ג'/יום</span></div>
+        <div class="rda-bar"><div class="rda-fill" style="width:100%"></div></div>
+      </div>
+      <div class="rda-item">
+        <div class="rda-label"><span>גברים (19–50)</span><span>38 ג'/יום</span></div>
+        <div class="rda-bar"><div class="rda-fill" style="width:100%"></div></div>
+      </div>
+      <div class="rda-item">
+        <div class="rda-label"><span>ממוצע צריכה בישראל</span><span>~16 ג'</span></div>
+        <div class="rda-bar"><div class="rda-fill" style="width:42%"></div></div>
+      </div>
+    </div>
+    <div class="fiber-tip">
+      💡 <strong>מיקרוביום:</strong> חיידקי המעי מפרקים סיבים ← מייצרים SCFA (חומצות שומן קצרות שרשרת) ← מזינים את תאי המעי, מחזקים חסינות, מפחיתים דלקת.
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ SLIDE 9 – METABOLIC SYNDROME ════════════ -->
+<div class="slide s9">
+  <div class="slide-title">תסמונת מטבולית וסוכרת סוג 2</div>
+  <div class="slide-sub">5 קריטריונים — 3 מתוכם = אבחנה. נפוץ ב-25% מהמבוגרים בישראל</div>
+  <div class="ms-criteria">
+    <div class="ms-c"><div class="mc-icon">🍺</div><h5>היקף מותניים מוגדל</h5><p>גברים &gt;102 ס"מ<br>נשים &gt;88 ס"מ</p></div>
+    <div class="ms-c"><div class="mc-icon">🩸</div><h5>טריגליצרידים גבוהים</h5><p>&ge;150 mg/dL<br>או תרופה לנושא</p></div>
+    <div class="ms-c"><div class="mc-icon">💛</div><h5>HDL נמוך</h5><p>גברים &lt;40<br>נשים &lt;50 mg/dL</p></div>
+    <div class="ms-c"><div class="mc-icon">💉</div><h5>לחץ דם גבוה</h5><p>&ge;130/85 mmHg<br>או תרופות ל-BP</p></div>
+    <div class="ms-c"><div class="mc-icon">🍬</div><h5>גלוקוז בצום גבוה</h5><p>&ge;100 mg/dL<br>או סוכרת מאובחנת</p></div>
+  </div>
+  <div class="ms-path">
+    <div class="ms-path-step"><h5>1. תנגודת אינסולין</h5><p>תאים אינם מגיבים → הלבלב מייצר יותר אינסולין → היפראינסולינמיה</p></div>
+    <div class="ms-arr">→</div>
+    <div class="ms-path-step"><h5>2. שומן בטני</h5><p>עודף גלוקוז → שומן בכבד ובבטן (ויסצרלי) → דלקת כרונית נמוכת דרגה</p></div>
+    <div class="ms-arr">→</div>
+    <div class="ms-path-step"><h5>3. סוכרת סוג 2</h5><p>תאי β נשחקים → הלבלב כשל → גלוקוז בדם גבוה בצום (&gt;126 mg/dL)</p></div>
+    <div class="ms-arr">→</div>
+    <div class="ms-path-step"><h5>4. סיבוכים</h5><p>CVD, אי-ספיקת כליות, נוירופתיה, רטינופתיה, פצעים שאינם מחלימים</p></div>
+  </div>
+  <div class="ms-note">✅ <strong>מניעה ואפילו הפיכה:</strong> אובדן 5–10% ממשקל הגוף + פעילות גופנית + הפחתת סוכר מוסף וסוכרים מזוקקים — יכולים לנרמל את כל הפרמטרים.</div>
+</div>
+
+<!-- ════════════ SLIDE 10 – FRUCTOSE ════════════ -->
+<div class="slide s10">
+  <div class="slide-title">פרוקטוז — הסוכר השנוי במחלוקת</div>
+  <div class="slide-sub">אותה מולקולה, תוצאות שונות לחלוטין — מה הסוד?</div>
+  <div class="fruct-row">
+    <div class="fruct-card natural">
+      <h5>🍎 פרוקטוז בפירות שלמים</h5>
+      <ul>
+        <li>מוקף סיבים תזונתיים — ספיגה מדורגת</li>
+        <li>כמות פרוקטוז לפרי = 5–10 גרם</li>
+        <li>מחקרים: 2–5 פירות ביום ← מפחית סיכון לסוכרת</li>
+        <li>ויטמינים, מינרלים, פיטוכימיקלים מגינים</li>
+        <li>אינדקס שובע גבוה — לא "עוצר" את הרעב</li>
+      </ul>
+    </div>
+    <div class="fruct-card hfcs">
+      <h5>🏭 HFCS ופרוקטוז חופשי</h5>
+      <ul>
+        <li>אין סיבים — ספיגה מיידית, מגיע לכבד "בשיטפון"</li>
+        <li>משקה ממותק = 40–80 גרם פרוקטוז בכוס אחת</li>
+        <li>כבד: פרוקטוז → שומן (DNL) → NAFLD, טריגליצרידים</li>
+        <li>גורם לתנגודת לאינסולין גם ללא עלייה ב-BMI</li>
+        <li>לא מדכא גרלין (הורמון הרעב) → ממשיכים לאכול</li>
+      </ul>
+    </div>
+  </div>
+  <div class="hfcs-banner">
+    📊 <strong>מחקר Bray et al. (AJCN 2004):</strong> עלייה מקבילה בצריכת HFCS לעלייה בהשמנה בארה"ב. ייבוא HFCS לישראל גדל ב-300% בין 2000 ל-2015. בדקו תוויות של לחם, רטבים, דגני בוקר, יוגורטים ממותקים — תמצאו אותו.
+  </div>
+</div>
+
+<!-- ════════════ SLIDE 11 – LOW VS HIGH CARB ════════════ -->
+<div class="slide s11">
+  <div class="slide-title">Low-Carb מול High-Carb — מה אומר המדע?</div>
+  <div class="slide-sub">הוויכוח שמחלק דיאטנים — מה הראיות המדעיות באמת אומרות?</div>
+  <div class="diet-compare">
+    <div class="dc-col low">
+      <h4>⬇️ Low-Carb / קטוגני</h4>
+      <div class="dc-point"><span>✅</span><span>ירידה מהירה במשקל לטווח קצר</span></div>
+      <div class="dc-point"><span>✅</span><span>שיפור מהיר בגלוקוז ואינסולין</span></div>
+      <div class="dc-point"><span>✅</span><span>יעיל מאוד בסוכרת סוג 2 (Virta Health)</span></div>
+      <div class="dc-point"><span>⚠️</span><span>קשה לשמירה לאורך זמן</span></div>
+      <div class="dc-point"><span>⚠️</span><span>חסר סיבים ופיטוכימיקלים מדגנים/קטניות</span></div>
+      <div class="dc-point"><span>⚠️</span><span>עלייה ב-LDL בחלק מהאנשים</span></div>
+    </div>
+    <div class="dc-vs"><div class="vs-ball">VS</div></div>
+    <div class="dc-col high">
+      <h4>⬆️ High-Carb / צמחוני-מלא</h4>
+      <div class="dc-point"><span>✅</span><span>עשיר בסיבים ופיטוכימיקלים</span></div>
+      <div class="dc-point"><span>✅</span><span>קשור לאורך חיים (Blue Zones)</span></div>
+      <div class="dc-point"><span>✅</span><span>קל יותר לשמירה לאורך זמן</span></div>
+      <div class="dc-point"><span>⚠️</span><span>ירידה איטית יותר בסוכרת</span></div>
+      <div class="dc-point"><span>⚠️</span><span>טעות נפוצה: פחמימות מזוקקות != מלאות</span></div>
+      <div class="dc-point"><span>⚠️</span><span>עלול להכיל יותר סוכר בסה"כ</span></div>
+    </div>
+  </div>
+  <div class="dc-verdict">
+    🔬 <strong>מסקנת מטה-אנליזות (2023):</strong> שתי הגישות יכולות לעבוד. ההבדל הגדול ביותר הוא <strong>עמידה בדיאטה</strong>, לא סוג הדיאטה. המחקר תומך ב: פחמימות מלאות + מינימום סוכר מוסף + שפע ירקות — ללא תלות ב-% פחמימות כולל.
+  </div>
+</div>
+
+<!-- ════════════ SLIDE 12 – WHOLE GRAINS ════════════ -->
+<div class="slide s12">
+  <div class="slide-title">דגנים מלאים — מה זה אומר באמת?</div>
+  <div class="slide-sub">80% מהדגנים הנמכרים כ"מלאים" — אינם כאלה. כך מזהים אמיתיים</div>
+  <div class="grain-anatomy">
+    <div class="grain-svg-wrap">
+      <svg width="160" height="220" viewBox="0 0 160 220">
+        <ellipse cx="80" cy="110" rx="55" ry="95" fill="#4a3020" stroke="#8B6240" stroke-width="2"/>
+        <ellipse cx="80" cy="110" rx="42" ry="80" fill="#c8a84b" stroke="#d4b860" stroke-width="1"/>
+        <ellipse cx="80" cy="110" rx="28" ry="60" fill="#e8e0c0" stroke="rgba(255,255,255,.3)" stroke-width="1"/>
+        <ellipse cx="65" cy="185" rx="18" ry="12" fill="#6a8a30" stroke="#7a9a40" stroke-width="1"/>
+        <text x="80" y="75" text-anchor="middle" fill="#c8a870" font-size="11" font-family="Heebo">סובין</text>
+        <text x="80" y="115" text-anchor="middle" fill="#e0d090" font-size="11" font-family="Heebo">אנדוספרם</text>
+        <text x="58" y="192" text-anchor="middle" fill="#a0d060" font-size="11" font-family="Heebo">נבט</text>
+        <line x1="80" y1="60" x2="30" y2="45" stroke="rgba(200,168,75,.5)" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="80" y1="115" x2="130" y2="100" stroke="rgba(224,208,144,.5)" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="60" y1="185" x2="30" y2="200" stroke="rgba(160,208,96,.5)" stroke-width="1" stroke-dasharray="3,2"/>
+      </svg>
+    </div>
+    <div class="grain-parts">
+      <div class="gp bran">
+        <h5>🟤 סובין (Bran) — השכבה החיצונית</h5>
+        <p>סיבים, ויטמיני B, מינרלים (ברזל, אבץ, מגנזיום). נמצא בדגן מלא. מוסר בטחינה "לבנה".</p>
+      </div>
+      <div class="gp germ">
+        <h5>🟡 נבט (Germ) — עובר הדגן</h5>
+        <p>ויטמין E, חומצות שומן חיוניות, B-vitamins, ומינרלים. עשיר ביותר — גם הוא מוסר בעיבוד.</p>
+      </div>
+      <div class="gp endo">
+        <h5>⬜ אנדוספרם</h5>
+        <p>בעיקר עמילן וחלבון (גלוטן). זה מה שנשאר ב"קמח לבן". GI גבוה, ערך תזונתי מופחת.</p>
+      </div>
+    </div>
+  </div>
+  <div class="grain-list">
+    <div class="grain-item"><div class="gi-ico">🌾</div><h5>שיבולת שועל</h5><p>בטא-גלוקן, מוריד LDL, GI=55</p></div>
+    <div class="grain-item"><div class="gi-ico">🌿</div><h5>כוסמת</h5><p>GF, רוטין, פלבונואידים, GI=51</p></div>
+    <div class="grain-item"><div class="gi-ico">🫘</div><h5>קינואה</h5><p>חלבון שלם + פחמימות, GI=53</p></div>
+    <div class="grain-item"><div class="gi-ico">🟫</div><h5>שעורה</h5><p>הכי עשיר בבטא-גלוקן, GI=28</p></div>
+  </div>
+</div>
+
+<!-- ════════════ SLIDE 13 – SUGAR ON LABELS ════════════ -->
+<div class="slide s13">
+  <div class="left">
+    <div class="slide-title">לאתר סוכר מוסתר בתוויות</div>
+    <div class="slide-sub">תעשיית המזון משתמשת ב-60+ שמות שונים לסוכר — כך לא תופלו</div>
+    <div class="label-tips-s13">
+      <div class="lt"><div class="lt-ico">1️⃣</div><div><h5>בדקו את מיקום הסוכר ברשימה</h5><p>רשימת מרכיבים = לפי סדר משקל. סוכר במקום 1–3 = מוצר עתיר סוכר.</p></div></div>
+      <div class="lt"><div class="lt-ico">🔢</div><div><h5>חפשו "סוכרים סה"כ" vs. "סוכרים מוספים"</h5><p>תקן ישראלי חדש (2024) מחייב הפרדה. "סוכרים מוספים" = הסוכן הבעייתי.</p></div></div>
+      <div class="lt"><div class="lt-ico">🧮</div><div><h5>חישוב פשוט: גרמים ÷ 4 = כפיות</h5><p>משקה עם 36 גרם סוכר = 9 כפיות. כוס אחת.</p></div></div>
+      <div class="lt"><div class="lt-ico">⚠️</div><div><h5>מוצרים "בריאים" עם הרבה סוכר</h5><p>גרנולה (30%), יוגורט ממותק (15%), רטבים (20%), לחמים "מלאים" עם סירופ תירס.</p></div></div>
+    </div>
+  </div>
+  <div class="right">
+    <div class="sugar-names">
+      <h4>60+ שמות לסוכר</h4>
+      <span class="sn-chip">סירופ גלוקוז-פרוקטוז</span>
+      <span class="sn-chip">מלטוז</span><span class="sn-chip">דקסטרוז</span>
+      <span class="sn-chip">לקטוז</span><span class="sn-chip">שרבט אגבה</span>
+      <span class="sn-chip">מולסה</span><span class="sn-chip">סוכר קנה גולמי</span>
+      <span class="sn-chip">קריסטל פרוקטוז</span>
+      <span class="sn-chip">סירופ מייפל</span><span class="sn-chip">מלט שעורה</span>
+      <span class="sn-chip">טורבינדו</span><span class="sn-chip">דמרארה</span>
+      <span class="sn-chip">ריבה (ריכוז פרי)</span>
+      <span class="sn-chip">ספלנדה</span>
+      <div class="sn-note">
+        💡 כלל אצבע: כל מרכיב שמסתיים ב-"וז" (glucOSE, fructOSE, lactOSE...) הוא סוכר. כל "סירופ" הוא סוכר נוזלי.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ SLIDE 14 – QUIZ ════════════ -->
+<div class="slide s14">
+  <div class="slide-title">🧠 בדיקת הבנה</div>
+  <div class="slide-sub">לחצו על כרטיס לגלות את התשובה</div>
+  <div class="quiz-grid">
+    <div class="qc" onclick="this.classList.toggle('revealed')">
+      <div class="qn">שאלה 1</div>
+      <div class="qt">מדוע מיץ פרי עם GI זהה לפרי השלם מסוכן יותר?</div>
+      <div class="qa">הסיבים הוסרו! הסיבים יוצרים מטריצה שמאטה ספיגת הפרוקטוז. מיץ = פרוקטוז חופשי שמגיע לכבד בשיטפון. 250 מל מיץ תפוזים = 5 תפוזים ללא תחושת שובע.</div>
+    </div>
+    <div class="qc" onclick="this.classList.toggle('revealed')">
+      <div class="qn">שאלה 2</div>
+      <div class="qt">מה ההבדל בין GI ל-GL? ומדוע GL חשוב יותר?</div>
+      <div class="qa">GI מודד מהירות עלייה בסוכר ל-50 גרם פחמימות. GL מחשב GI × כמות פחמימות במנה אמיתית. אבטיח GI=72 אך GL=4 (מנה = 120 גרם). אוכלים אבטיח, לא 50 גרם פחמימה טהורה.</div>
+    </div>
+    <div class="qc" onclick="this.classList.toggle('revealed')">
+      <div class="qn">שאלה 3</div>
+      <div class="qt">מהם 3 הקריטריונים מתוך 5 לתסמונת מטבולית?</div>
+      <div class="qa">כל שילוב של 3 מתוך: (1) היקף מותניים גדול, (2) טריגליצרידים ≥150, (3) HDL נמוך, (4) לחץ דם ≥130/85, (5) גלוקוז בצום ≥100. שלושה = אבחנה.</div>
+    </div>
+    <div class="qc" onclick="this.classList.toggle('revealed')">
+      <div class="qn">שאלה 4</div>
+      <div class="qt">ממה עשוי לחם "חיטה מלאה" שב-100 גרם מכיל רק 3 גרם סיבים?</div>
+      <div class="qa">בסבירות גבוהה — קמח לבן עם תוספת מועטה של סובין, ולא בכלל דגן מלא. לחם מלא אמיתי מכיל 5–8 גרם סיבים ל-100 גרם. המרכיב הראשון ברשימה צריך להיות "קמח חיטה מלאה" — לא "קמח חיטה".</div>
+    </div>
+  </div>
+  <div class="quiz-hint">💡 לחצו על כרטיס לגלות את התשובה</div>
+</div>
+
+<!-- ════════════ SLIDE 15 – SUMMARY ════════════ -->
+<div class="slide s15">
+  <div class="slide-title">סיכום שיעור 2</div>
+  <div class="slide-sub">פחמימות אינן האויב — הסוכר המוסף הוא</div>
+  <div class="sum-grid">
+    <div class="si"><div class="si-ico">🔬</div><h5>כימיה = גורל</h5><p>מבנה מולקולרי קובע ספיגה. פולי &gt; די &gt; מונו. סיבים = עיכול במעי הגס.</p></div>
+    <div class="si"><div class="si-ico">📈</div><h5>GI ו-GL</h5><p>GI = מהירות. GL = עומס אמיתי. עדיפו מזונות GI נמוך עם שפע סיבים.</p></div>
+    <div class="si"><div class="si-ico">🔑</div><h5>אינסולין</h5><p>הורמון מרכזי. תנגודת = דרך לסוכרת. ספייקים חוזרים = נזק מצטבר.</p></div>
+    <div class="si"><div class="si-ico">🍎</div><h5>פרוקטוז: הקשר חשוב</h5><p>בפירות שלמים = בטוח. ב-HFCS וב-מיצים = מסוכן. המטריצה קובעת.</p></div>
+    <div class="si"><div class="si-ico">🦠</div><h5>סיבים + מיקרוביום</h5><p>25–38 גרם ביום. רוב האוכלוסייה בחסר. SCFA = בריאות מעי ומערכת חיסון.</p></div>
+    <div class="si"><div class="si-ico">🌾</div><h5>מלא = מלא</h5><p>3 חלקי הגרעין שלמים. בדקו תוויות: "קמח חיטה מלאה" כמרכיב ראשון.</p></div>
+  </div>
+  <div class="next-box">
+    📌 שיעור הבא: <strong>חלבונים לעומק</strong> — מן החי ומן הצומח, חומצות אמינו, DIAAS, השלמת חלבונים, דנטורציה, מחסור וגורל החלבון בגוף
+  </div>
+</div>
+
+<!-- ════════════ NAV ════════════ -->
+</div>
+<div class="nav">
+  <button id="prevBtn" onclick="go(-1)" disabled>→</button>
+  <div class="dots" id="dots"></div>
+  <div class="slide-counter" id="ctr">1 / 15</div>
+  <button id="nextBtn" onclick="go(1)">←</button>
+</div>
+
+
+
+<script>
+  let cur = 0;
+  const deck = document.getElementById('deck');
+  const slides = deck.querySelectorAll('.slide');
+  const n = slides.length;
+  const dc = document.getElementById('dots');
+  const ctr = document.getElementById('ctr');
+  for (let i = 0; i < n; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => goTo(i);
+    dc.appendChild(d);
+  }
+  function goTo(i) {
+    if (i < 0 || i >= n) return;
+    slides[cur].classList.remove('active');
+    dc.children[cur].classList.remove('active');
+    cur = i;
+    slides[cur].classList.add('active');
+    dc.children[cur].classList.add('active');
+    ctr.textContent = (cur + 1) + ' / ' + n;
+    document.getElementById('prevBtn').disabled = cur === 0;
+    document.getElementById('nextBtn').disabled = cur === n - 1;
+  }
+  function go(d) { goTo(cur + d); }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   go(1);
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') go(-1);
+  });
+</script>
+
+</body>
+</html>

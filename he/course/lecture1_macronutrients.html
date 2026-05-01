@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>שיעור 1 – מקרו ומיקרונוטריאנטים | תזונה טבעית-נבונה</title>
+<link href="https://fonts.googleapis.com/css2?family=Secular+One&family=Heebo:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0d1208; --panel:#131a09;
+    --gold:#c8a84b; --gold-dim:rgba(200,168,75,.15); --gold-border:rgba(200,168,75,.3);
+    --sage:#7a9a5a; --light-sage:#c8e0a8;
+    --earth:#8b6240; --rust:#b85c38;
+    --cream:#f5f0e8; --muted:rgba(245,240,232,.55);
+    --card:rgba(255,255,255,.04); --border:rgba(255,255,255,.08);
+    --olive:#4a5e2a;
+    --red:#e84343; --green:#4caf7d; --blue:#4a9eff;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  html, body { margin:0; padding:0; width:100%; height:100%; overflow:hidden; }
+  body { font-family:'Heebo',sans-serif; background:var(--bg,#0d1208); color:var(--cream,#f5f0e8); direction:rtl; }
+
+  #deck { position:relative; width:100%; height:100%; overflow:hidden; }
+  .slide { position:absolute; inset:0; display:none; overflow:hidden; }
+  .slide.active { display:flex; }
+
+
+  /* NAV */
+  .nav{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:14px;background:rgba(13,18,8,.9);backdrop-filter:blur(14px);border:1px solid var(--gold-border);border-radius:50px;padding:9px 22px;z-index:1000;}
+  .nav button{background:none;border:none;color:var(--gold);font-size:17px;cursor:pointer;padding:4px 10px;border-radius:20px;transition:all .2s;}
+  .nav button:hover{background:var(--gold-dim);}
+  .nav button:disabled{opacity:.25;cursor:default;}
+  .slide-counter{color:var(--muted);font-size:13px;min-width:65px;text-align:center;}
+  .dots{display:flex;gap:5px;}
+  .dot{width:6px;height:6px;border-radius:50%;background:rgba(200,168,75,.25);cursor:pointer;transition:all .3s;}
+  .dot.active{background:var(--gold);transform:scale(1.5);}
+
+  /* SHARED */
+  .slide-title{font-family:'Secular One',sans-serif;font-size:clamp(26px,3.6vw,44px);line-height:1.15;margin-bottom:8px;}
+  .slide-sub{font-size:15px;color:var(--muted);margin-bottom:28px;line-height:1.6;}
+
+  /* ══════ S1 TITLE ══════ */
+  .s1{flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;background:radial-gradient(ellipse 80% 60% at 50% 40%,#1e2a0a 0%,var(--bg) 100%);}
+  .s1-pattern{position:absolute;inset:0;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Cellipse cx='40' cy='40' rx='20' ry='35' fill='none' stroke='%23c8a84b' stroke-width='1' transform='rotate(30 40 40)'/%3E%3C/svg%3E");background-size:80px 80px;}
+  .s1 .course-label{font-size:12px;letter-spacing:4px;color:var(--gold);opacity:.7;margin-bottom:16px;position:relative;}
+  .s1 h1{font-family:'Secular One',sans-serif;font-size:clamp(36px,5vw,68px);line-height:1.05;color:var(--cream);position:relative;}
+  .s1 h1 em{color:var(--gold);font-style:normal;}
+  .s1 .s1-sub{font-size:17px;color:var(--muted);margin-top:16px;max-width:600px;position:relative;}
+  .s1 .meta{display:flex;gap:28px;margin-top:44px;position:relative;}
+  .meta-item{text-align:center;}
+  .meta-item .num{font-family:'Secular One',sans-serif;font-size:32px;color:var(--gold);}
+  .meta-item .lbl{font-size:12px;color:var(--sage);margin-top:2px;}
+  .meta-sep{width:1px;height:48px;background:rgba(200,168,75,.25);align-self:center;}
+  .s1 .quote{position:absolute;bottom:88px;left:0;right:0;text-align:center;font-size:14px;color:var(--gold);opacity:.45;letter-spacing:1px;}
+
+  /* ══════ S2 AGENDA ══════ */
+  .s2{flex-direction:row;}
+  .s2-bar{width:280px;flex-shrink:0;background:linear-gradient(160deg,#1a2a0a,var(--bg));padding:50px 32px;display:flex;flex-direction:column;border-left:1px solid var(--border);}
+  .s2-bar .bar-icon{font-size:55px;margin-bottom:18px;}
+  .s2-bar h2{font-family:'Secular One',sans-serif;font-size:28px;color:var(--gold);margin-bottom:10px;}
+  .s2-bar p{font-size:14px;color:var(--muted);line-height:1.6;}
+  .s2-content{flex:1;padding:50px 55px;display:flex;flex-direction:column;justify-content:center;}
+  .s2-content h3{font-size:11px;letter-spacing:3px;color:var(--gold);opacity:.6;text-transform:uppercase;margin-bottom:22px;}
+  .ag{display:flex;align-items:flex-start;gap:16px;padding:12px 0;border-bottom:1px solid var(--border);}
+  .ag:last-child{border:none;}
+  .ag .n{font-family:'Secular One',sans-serif;font-size:26px;color:var(--gold);opacity:.3;min-width:30px;}
+  .ag h4{font-size:15px;font-weight:700;color:var(--cream);margin-bottom:2px;}
+  .ag p{font-size:13px;color:var(--muted);}
+
+  /* ══════ S3 WHAT IS NUTRIENT ══════ */
+  .s3{flex-direction:column;padding:50px 70px;justify-content:center;}
+  .s3 .slide-title{color:var(--gold);}
+  .n4grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  .ncard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:26px;position:relative;overflow:hidden;}
+  .ncard::before{content:attr(data-e);position:absolute;top:-5px;left:14px;font-size:68px;opacity:.07;}
+  .ncard h4{font-family:'Secular One',sans-serif;font-size:21px;color:var(--gold);margin-bottom:8px;}
+  .ncard p{font-size:14px;color:var(--muted);line-height:1.7;}
+  .ncard .tg{display:inline-block;margin-top:9px;font-size:11px;background:var(--gold-dim);color:var(--gold);border:1px solid var(--gold-border);padding:2px 10px;border-radius:20px;letter-spacing:1px;}
+
+  /* ══════ S4 MACRO OVERVIEW ══════ */
+  .s4{flex-direction:column;padding:50px 70px;justify-content:center;background:linear-gradient(135deg,#0e180a,#14200e);}
+  .s4 .slide-title{color:var(--gold);}
+  .macro-row{display:flex;gap:18px;}
+  .mc{flex:1;border-radius:14px;padding:28px;}
+  .mc.carbs{background:linear-gradient(135deg,#fff4d4,#fde9a0);}
+  .mc.prot {background:linear-gradient(135deg,#ffeae0,#ffc8a8);}
+  .mc.fat  {background:linear-gradient(135deg,#e8f4d8,#c4e0a0);}
+  .mc .mi{font-size:38px;margin-bottom:12px;}
+  .mc h4{font-family:'Secular One',sans-serif;font-size:21px;margin-bottom:4px;}
+  .mc .kcal{font-size:27px;font-weight:800;margin-bottom:2px;}
+  .mc .kcal span{font-size:13px;font-weight:400;opacity:.6;}
+  .mc ul{margin-top:10px;padding-right:16px;}
+  .mc ul li{font-size:13px;color:rgba(26,26,15,.75);margin-bottom:3px;line-height:1.5;}
+  .mc.carbs h4,.mc.carbs .kcal{color:#5a3d00;}
+  .mc.prot  h4,.mc.prot  .kcal{color:#7a2800;}
+  .mc.fat   h4,.mc.fat   .kcal{color:#2d5a00;}
+
+  /* ══════ S5 CARBS ══════ */
+  .s5{flex-direction:row;background:#2a1a05;}
+  .s5 .left{flex:1;padding:50px;display:flex;flex-direction:column;justify-content:center;}
+  .s5 .slide-title{color:#f5d060;}
+  .s5 .slide-sub{color:rgba(245,208,96,.5);}
+  .sug{margin-bottom:16px;padding:15px 18px;border-radius:9px;background:rgba(255,255,255,.05);border-right:4px solid;}
+  .sug.mono{border-color:#e84343;}
+  .sug.di  {border-color:#f5d060;}
+  .sug.poly{border-color:#4caf7d;}
+  .sug h5{font-size:15px;font-weight:700;color:var(--cream);margin-bottom:3px;}
+  .sug p{font-size:13px;color:rgba(245,240,232,.6);line-height:1.5;}
+  .s5 .right{width:310px;padding:50px 35px;display:flex;flex-direction:column;justify-content:center;background:rgba(245,208,96,.06);border-right:1px solid rgba(245,208,96,.1);}
+  .gi-sec h4{font-family:'Secular One',sans-serif;font-size:19px;color:#f5d060;margin-bottom:18px;}
+  .gib{margin-bottom:14px;}
+  .gib .gl{display:flex;justify-content:space-between;font-size:13px;color:rgba(245,240,232,.8);margin-bottom:5px;}
+  .gib .track{height:10px;background:rgba(255,255,255,.1);border-radius:5px;overflow:hidden;}
+  .gib .fill{height:100%;border-radius:5px;}
+  .fill.low{background:#4caf7d;}
+  .fill.mid{background:#f5d060;}
+  .fill.hi {background:#e84343;}
+
+  /* ══════ S6 PROTEINS ══════ */
+  .s6{flex-direction:column;padding:50px 70px;justify-content:center;background:#1a0a05;}
+  .s6 .slide-title{color:#ffb080;}
+  .pcomp{display:grid;grid-template-columns:1fr 80px 1fr;gap:0;align-items:start;}
+  .pcol h4{font-size:17px;font-weight:700;padding-bottom:11px;border-bottom:2px solid;margin-bottom:16px;}
+  .pcol.ani h4{color:#ffb080;border-color:#ffb080;}
+  .pcol.pla h4{color:#a8d080;border-color:#a8d080;}
+  .ppt{display:flex;gap:10px;margin-bottom:10px;font-size:13px;color:var(--muted);line-height:1.5;}
+  .ppt .b{flex-shrink:0;}
+  .vs-d{display:flex;align-items:center;justify-content:center;}
+  .vs-c{width:52px;height:52px;border-radius:50%;background:var(--card);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Secular One',sans-serif;font-size:18px;}
+
+  /* ══════ S7 AMINO ACIDS ══════ */
+  .s7{flex-direction:column;padding:50px 70px;justify-content:center;background:linear-gradient(160deg,#0d1a1f,#0a2530);}
+  .s7 .slide-title{color:#60c8d8;}
+  .s7 .slide-sub{color:rgba(96,200,216,.5);}
+  .agrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+  .ac{padding:18px;border-radius:10px;border:1px solid rgba(96,200,216,.15);background:var(--card);}
+  .ac h5{font-size:14px;font-weight:700;color:#60c8d8;margin-bottom:7px;}
+  .ac p{font-size:12px;color:var(--muted);line-height:1.6;}
+  .atag{display:inline-block;margin-top:7px;font-size:10px;padding:2px 8px;border-radius:10px;background:rgba(96,200,216,.12);color:#60c8d8;}
+
+  /* ══════ S8 FATS ══════ */
+  .s8{flex-direction:row;background:#0f1a0a;}
+  .s8 .left{flex:1;padding:50px;display:flex;flex-direction:column;justify-content:center;}
+  .s8 .slide-title{color:#90e050;}
+  .ft{padding:14px 18px;margin-bottom:12px;border-radius:8px;border-right:3px solid;}
+  .ft.sat  {border-color:#e84343;background:rgba(232,67,67,.08);}
+  .ft.unsat{border-color:#90e050;background:rgba(144,224,80,.08);}
+  .ft.trans{border-color:#f5a623;background:rgba(245,166,35,.08);}
+  .ft h5{font-size:14px;font-weight:700;color:var(--cream);margin-bottom:3px;}
+  .ft p{font-size:13px;color:var(--muted);line-height:1.5;}
+  .s8 .right{width:295px;padding:50px 33px;display:flex;flex-direction:column;justify-content:center;background:rgba(144,224,80,.04);border-right:1px solid rgba(144,224,80,.1);}
+  .cholbox h4{font-family:'Secular One',sans-serif;font-size:18px;color:#90e050;margin-bottom:16px;}
+  .chi{margin-bottom:14px;padding:13px;border-radius:8px;background:var(--card);}
+  .chi .cl{font-size:13px;font-weight:700;margin-bottom:3px;}
+  .chi .cl.hdl{color:#90e050;}
+  .chi .cl.ldl{color:#e84343;}
+  .chi .cl.neu{color:#f5a623;}
+  .chi p{font-size:12px;color:var(--muted);}
+
+  /* ══════ S9 MICRONUTRIENTS ══════ */
+  .s9{flex-direction:column;padding:50px 70px;justify-content:center;background:linear-gradient(135deg,#1a1205,#1e1808);}
+  .s9 .slide-title{color:var(--gold);}
+  .mtable{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;}
+  .mcard{background:white;border-radius:10px;padding:16px;box-shadow:0 2px 12px rgba(0,0,0,.12);border-top:3px solid;}
+  .mcard.vit{border-color:var(--gold);}
+  .mcard.min{border-color:var(--rust);}
+  .mcard .mcat{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(26,26,15,.4);margin-bottom:5px;}
+  .mcard h5{font-family:'Secular One',sans-serif;font-size:16px;color:#1a1a0f;margin-bottom:5px;}
+  .mcard p{font-size:12px;color:rgba(26,26,15,.65);line-height:1.5;}
+  .mcard .src{font-size:11px;color:var(--olive);margin-top:7px;font-weight:600;}
+
+  /* ══════ S10 FOOD GROUPS ══════ */
+  .s10{flex-direction:column;padding:50px 70px;justify-content:center;}
+  .s10 .slide-title{color:var(--gold);}
+  .fgroups{display:grid;grid-template-columns:repeat(5,1fr);gap:13px;}
+  .fg{border-radius:12px;padding:22px 16px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:9px;}
+  .fg .fi{font-size:36px;}
+  .fg h5{font-size:13px;font-weight:700;}
+  .fg p{font-size:12px;line-height:1.5;opacity:.7;}
+  .fg1{background:rgba(255,240,100,.1);border:1px solid rgba(255,240,100,.18);}  .fg1 h5{color:#ffe060;}
+  .fg2{background:rgba(255,150,80,.1);border:1px solid rgba(255,150,80,.18);}   .fg2 h5{color:#ffa060;}
+  .fg3{background:rgba(100,200,80,.1);border:1px solid rgba(100,200,80,.18);}   .fg3 h5{color:#80d060;}
+  .fg4{background:rgba(100,180,255,.1);border:1px solid rgba(100,180,255,.18);} .fg4 h5{color:#80c8ff;}
+  .fg5{background:rgba(200,168,75,.1);border:1px solid rgba(200,168,75,.18);}   .fg5 h5{color:var(--gold);}
+
+  /* ══════ S11 WATER ══════ */
+  .s11{flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:50px 80px;background:linear-gradient(135deg,#050d20,#0a1a35);}
+  .s11 .slide-title{color:#60a8e0;}
+  .s11 .slide-sub{color:rgba(96,168,224,.55);}
+  .wfacts{display:flex;gap:32px;justify-content:center;margin-bottom:36px;}
+  .wf{text-align:center;}
+  .wf .big{font-family:'Secular One',sans-serif;font-size:50px;color:#60a8e0;line-height:1;}
+  .wf .sm{font-size:12px;color:rgba(255,255,255,.45);margin-top:4px;}
+  .wsep{width:1px;background:rgba(96,168,224,.2);align-self:stretch;}
+  .wroles{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;}
+  .wr{padding:9px 18px;background:rgba(96,168,224,.1);border:1px solid rgba(96,168,224,.18);border-radius:25px;font-size:14px;color:rgba(255,255,255,.75);}
+
+  /* ══════ S12 DIGESTION ══════ */
+  .s12{flex-direction:column;padding:50px 70px;justify-content:center;background:linear-gradient(135deg,#1a0e05,#221208);}
+  .s12 .slide-title{color:var(--earth);}
+  .dsteps{display:flex;flex-direction:column;position:relative;}
+  .dsteps::before{content:'';position:absolute;right:20px;top:28px;bottom:28px;width:2px;background:linear-gradient(to bottom,var(--earth),var(--olive));}
+  .ds{display:flex;gap:22px;align-items:flex-start;padding:13px 0;position:relative;z-index:1;}
+  .dn{width:44px;height:44px;border-radius:50%;background:var(--earth);color:white;display:flex;align-items:center;justify-content:center;font-family:'Secular One',sans-serif;font-size:17px;flex-shrink:0;}
+  .dc h5{font-size:15px;font-weight:700;color:var(--cream);margin-bottom:3px;}
+  .dc p{font-size:13px;color:var(--muted);line-height:1.5;}
+
+  /* ══════ S13 FOOD LABELS ══════ */
+  .s13{flex-direction:row;background:#1a1520;}
+  .s13 .left{flex:1;padding:50px;display:flex;flex-direction:column;justify-content:center;}
+  .s13 .slide-title{color:var(--cream);}
+  .s13 .slide-sub{color:var(--muted);}
+  .ltips{display:flex;flex-direction:column;gap:12px;}
+  .ltp{display:flex;gap:14px;align-items:flex-start;padding:13px 16px;background:var(--card);border-radius:9px;border-right:3px solid var(--gold);}
+  .ltp .li{font-size:21px;flex-shrink:0;}
+  .ltp h5{font-size:14px;font-weight:700;color:var(--gold);margin-bottom:2px;}
+  .ltp p{font-size:13px;color:var(--muted);line-height:1.5;}
+  .s13 .right{width:275px;background:white;color:#111;padding:32px 28px;display:flex;flex-direction:column;justify-content:center;direction:ltr;font-family:Arial,sans-serif;}
+  .nft{font-size:26px;font-weight:900;border-bottom:7px solid #111;padding-bottom:4px;margin-bottom:4px;}
+  .nfs{font-size:11px;margin-bottom:4px;}
+  .nfcl{font-size:11px;border-bottom:3px solid #111;padding-bottom:4px;margin-bottom:4px;}
+  .nfcn{font-size:40px;font-weight:900;}
+  .nfr{display:flex;justify-content:space-between;border-bottom:1px solid #ddd;padding:2px 0;font-size:11px;}
+  .nfr.thk{border-bottom:3px solid #111;}
+  .nfdv{font-size:10px;margin-top:4px;color:#555;}
+
+  /* ══════ S14 QUIZ ══════ */
+  .s14{flex-direction:column;align-items:center;justify-content:center;padding:50px 80px;text-align:center;background:radial-gradient(ellipse 80% 60% at 50% 50%,#1a2a0a,var(--bg));}
+  .s14 .slide-title{color:var(--gold);margin-bottom:8px;}
+  .s14 .slide-sub{margin-bottom:32px;}
+  .qgrid{display:grid;grid-template-columns:1fr 1fr;gap:15px;width:100%;max-width:800px;}
+  .qc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;cursor:pointer;transition:all .3s;text-align:right;}
+  .qc:hover{background:rgba(255,255,255,.07);transform:translateY(-2px);}
+  .qc.rev{background:var(--gold-dim);border-color:var(--gold-border);}
+  .qc .qn{font-size:11px;color:var(--muted);margin-bottom:7px;}
+  .qc .qt{font-size:15px;color:var(--cream);font-weight:600;}
+  .qc .qa{margin-top:9px;font-size:13px;color:rgba(200,168,75,.9);display:none;line-height:1.6;}
+  .qc.rev .qa{display:block;}
+  .qhint{margin-top:12px;font-size:12px;color:rgba(255,255,255,.25);}
+
+  /* ══════ S15 SUMMARY ══════ */
+  .s15{flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:50px 80px;position:relative;}
+  .s15::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 50%,rgba(74,94,42,.25),transparent 70%);}
+  .s15 .slide-title{color:var(--gold);position:relative;margin-bottom:8px;}
+  .s15 .slide-sub{position:relative;margin-bottom:34px;}
+  .sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;width:100%;max-width:860px;position:relative;}
+  .si{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;text-align:right;}
+  .si .sii{font-size:25px;margin-bottom:8px;}
+  .si h5{font-size:15px;font-weight:700;color:var(--gold);margin-bottom:5px;}
+  .si p{font-size:13px;color:var(--muted);line-height:1.5;}
+  .nxtbox{margin-top:26px;padding:13px 26px;position:relative;background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:10px;font-size:14px;color:var(--gold);}
+  .nxtbox strong{color:var(--cream);}
+</style>
+</head>
+<body>
+
+<!-- ═══ SLIDE 1 – TITLE ═══ -->
+<div id="deck">
+<div class="slide s1 active">
+  <div class="s1-pattern"></div>
+  <div class="course-label">תזונה טבעית-נבונה · שיעור 1 מתוך 20</div>
+  <h1>מקרונוטריאנטים<br>ומיקרונוטריאנטים<br><em>המבוא המלא</em></h1>
+  <div class="s1-sub">"יהיו מזונותיך תרופותיך" — היפוקרטס</div>
+  <div class="meta">
+    <div class="meta-item"><div class="num">3</div><div class="lbl">שעות לימוד</div></div>
+    <div class="meta-sep"></div>
+    <div class="meta-item"><div class="num">15</div><div class="lbl">שקופיות</div></div>
+    <div class="meta-sep"></div>
+    <div class="meta-item"><div class="num">6</div><div class="lbl">נושאים מרכזיים</div></div>
+  </div>
+  <div class="quote">📚 קורס מקיף לתזונה בריאה ומבוססת-ראיות</div>
+</div>
+
+<!-- ═══ SLIDE 2 – AGENDA ═══ -->
+<div class="slide s2">
+  <div class="s2-bar">
+    <div class="bar-icon">🗓️</div>
+    <h2>תוכן השיעור</h2>
+    <p>היום נלמד את אבני הבניין הבסיסיות של כל מה שאנחנו אוכלים</p>
+  </div>
+  <div class="s2-content">
+    <h3>סדר יום</h3>
+    <div class="ag"><div class="n">01</div><div><h4>מהו נוטריאנט? חלוקה בסיסית</h4><p>מקרו לעומת מיקרו — ההבדלים המהותיים</p></div></div>
+    <div class="ag"><div class="n">02</div><div><h4>המקרונוטריאנטים: שלושת הגדולים</h4><p>פחמימות, חלבונים ושומנים — סקירה ראשונה</p></div></div>
+    <div class="ag"><div class="n">03</div><div><h4>פחמימות לעומק</h4><p>סוכרים פשוטים, מורכבים וסיבים תזונתיים</p></div></div>
+    <div class="ag"><div class="n">04</div><div><h4>חלבונים: מן החי ומן הצומח</h4><p>חומצות אמינו, מדדי איכות, השלמת חלבונים</p></div></div>
+    <div class="ag"><div class="n">05</div><div><h4>שומנים וכולסטרול</h4><p>שומן רווי, בלתי רווי, HDL/LDL</p></div></div>
+    <div class="ag"><div class="n">06</div><div><h4>מיקרונוטריאנטים, מים ועיכול</h4><p>ויטמינים, מינרלים, מים ומערכת העיכול</p></div></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 3 – WHAT IS NUTRIENT ═══ -->
+<div class="slide s3">
+  <div class="slide-title">מהו נוטריאנט?</div>
+  <div class="slide-sub">כל חומר שהגוף שלנו צורך מהמזון לצורך תפקוד, גדילה ואנרגיה</div>
+  <div class="n4grid">
+    <div class="ncard" data-e="🌾">
+      <h4>מקרונוטריאנטים</h4>
+      <p>חומרים שהגוף זקוק להם בכמויות גדולות. הם מספקים אנרגיה (קלוריות) ומשמשים כחומרי בניין לתאים, רקמות ואיברים.</p>
+      <span class="tg">MACRO = גדול</span>
+    </div>
+    <div class="ncard" data-e="💊">
+      <h4>מיקרונוטריאנטים</h4>
+      <p>ויטמינים ומינרלים שהגוף זקוק להם בכמויות קטנות מאוד, אך הם חיוניים לתפקוד תקין של מאות תהליכים ביולוגיים.</p>
+      <span class="tg">MICRO = קטן</span>
+    </div>
+    <div class="ncard" data-e="💧">
+      <h4>מים</h4>
+      <p>המולקולה החשובה ביותר. כ-60% מגוף האדם הוא מים. מעורב בכל תהליך ביוכימי, הובלת חומרי מזון ופינוי פסולת.</p>
+      <span class="tg">חיוני לחיים</span>
+    </div>
+    <div class="ncard" data-e="🦠">
+      <h4>פיטוכימיקלים</h4>
+      <p>חומרים צמחיים פעילים ביולוגית (פוליפנולים, קרוטנואידים) שאינם "חיוניים" קלאסית אך נמצאו קשורים לבריאות.</p>
+      <span class="tg">מחקר פעיל</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 4 – MACROS OVERVIEW ═══ -->
+<div class="slide s4">
+  <div class="slide-title">שלושת המקרונוטריאנטים</div>
+  <div class="slide-sub">כל מזון שאנחנו אוכלים מורכב משילוב של השלושה הבאים</div>
+  <div class="macro-row">
+    <div class="mc carbs">
+      <div class="mi">🌾</div><h4>פחמימות</h4>
+      <div class="kcal">4 <span>קלוריות לגרם</span></div>
+      <ul><li>מקור האנרגיה העיקרי של הגוף</li><li>גלוקוז — דלק של המוח</li><li>גליקוגן — אחסון בשריר ובכבד</li><li>סיבים תזונתיים — בריאות המעי</li></ul>
+    </div>
+    <div class="mc prot">
+      <div class="mi">🥩</div><h4>חלבונים</h4>
+      <div class="kcal">4 <span>קלוריות לגרם</span></div>
+      <ul><li>בניין שריר, עצמות ורקמות</li><li>אנזימים והורמונים</li><li>נוגדנים — מערכת החיסון</li><li>הובלת חומרים בדם</li></ul>
+    </div>
+    <div class="mc fat">
+      <div class="mi">🥑</div><h4>שומנים</h4>
+      <div class="kcal">9 <span>קלוריות לגרם</span></div>
+      <ul><li>ממברנות תאים</li><li>ויטמינים מסיסי שומן (A, D, E, K)</li><li>הורמוני מין וקורטיזול</li><li>בידוד תרמי ואנרגיה לטווח ארוך</li></ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 5 – CARBS ═══ -->
+<div class="slide s5">
+  <div class="left">
+    <div class="slide-title">פחמימות לעומק</div>
+    <div class="slide-sub">מסוכרוז פשוט עד סיב תזונתי מורכב</div>
+    <div class="sug mono"><h5>מונוסכרידים — חד-סוכרים</h5><p>גלוקוז, פרוקטוז, גלקטוז — יחידות הבניין הבסיסיות. נספגים ישירות לדם. GI גבוה בד"כ.</p></div>
+    <div class="sug di"><h5>דיסכרידים — דו-סוכרים</h5><p>סוכרוז (גלוקוז+פרוקטוז), לקטוז (חלב), מלטוז. מתפרקים בעיכול לחד-סוכרים.</p></div>
+    <div class="sug poly"><h5>פוליסכרידים — רב-סוכרים</h5><p>עמילן, גליקוגן, סיבים. עיכול איטי = עלייה הדרגתית בגלוקוז. סיבים — לא מתעכלים!</p></div>
+  </div>
+  <div class="right">
+    <div class="gi-sec">
+      <h4>מדד הגליקמי (GI)<br>— דוגמאות</h4>
+      <div class="gib"><div class="gl"><span>עדשים מבושלות</span><span>32</span></div><div class="track"><div class="fill low" style="width:32%"></div></div></div>
+      <div class="gib"><div class="gl"><span>לחם מחיטה מלאה</span><span>51</span></div><div class="track"><div class="fill mid" style="width:51%"></div></div></div>
+      <div class="gib"><div class="gl"><span>אורז לבן</span><span>72</span></div><div class="track"><div class="fill hi" style="width:72%"></div></div></div>
+      <div class="gib"><div class="gl"><span>לחם לבן</span><span>75</span></div><div class="track"><div class="fill hi" style="width:75%"></div></div></div>
+      <div class="gib"><div class="gl"><span>תמרים</span><span>42</span></div><div class="track"><div class="fill mid" style="width:42%"></div></div></div>
+      <div class="gib"><div class="gl"><span>חומוס</span><span>28</span></div><div class="track"><div class="fill low" style="width:28%"></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 6 – PROTEINS ═══ -->
+<div class="slide s6">
+  <div class="slide-title">חלבונים: מן החי מול מן הצומח</div>
+  <div class="slide-sub">שתי גישות תזונתיות — מה אומר המדע?</div>
+  <div class="pcomp">
+    <div class="pcol ani">
+      <h4>🥩 חלבון מן החי</h4>
+      <div class="ppt"><span class="b">✅</span><span>חלבון שלם — מכיל את כל 9 חומצות האמינו החיוניות</span></div>
+      <div class="ppt"><span class="b">✅</span><span>PDCAAS / DIAAS גבוה — זמינות ביולוגית מצוינת</span></div>
+      <div class="ppt"><span class="b">✅</span><span>עשיר ב-B12, ברזל המ, אבץ, קריאטין</span></div>
+      <div class="ppt"><span class="b">⚠️</span><span>שומן רווי וכולסטרול — בכמה מקורות</span></div>
+      <div class="ppt"><span class="b">⚠️</span><span>השפעה סביבתית גבוהה יותר</span></div>
+      <div class="ppt"><span class="b">⚠️</span><span>בשר מעובד — קשר לסרטן המעי (IARC Group 1)</span></div>
+    </div>
+    <div class="vs-d"><div class="vs-c">VS</div></div>
+    <div class="pcol pla">
+      <h4>🌿 חלבון מן הצומח</h4>
+      <div class="ppt"><span class="b">✅</span><span>עשיר בסיבים, פיטוכימיקלים ונוגדי חמצון</span></div>
+      <div class="ppt"><span class="b">✅</span><span>קשור לסיכון נמוך יותר למחלות כרוניות</span></div>
+      <div class="ppt"><span class="b">✅</span><span>טביעת רגל פחמנית נמוכה בהרבה</span></div>
+      <div class="ppt"><span class="b">⚠️</span><span>לרוב חלבון "חלקי" — חסר בחלק מחומצות האמינו</span></div>
+      <div class="ppt"><span class="b">💡</span><span>השלמה: קטניות + דגנים = חלבון שלם</span></div>
+      <div class="ppt"><span class="b">💡</span><span>יוצא דופן: סויה, קינואה — חלבון שלם</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 7 – AMINO ACIDS ═══ -->
+<div class="slide s7">
+  <div class="slide-title">חומצות אמינו</div>
+  <div class="slide-sub">אבני הבניין של כל חלבון בגוף — 20 חומצות אמינו, 9 מהן חיוניות</div>
+  <div class="agrid">
+    <div class="ac"><h5>חיוניות (Essential)</h5><p>9 שהגוף אינו יכול לסנתז. חייבים מהמזון: היסטידין, איזולאוצין, לאוצין, ליזין, מתיונין, פנילאלנין, תריאונין, טריפטופן, ולין.</p><span class="atag">חייבים מהמזון</span></div>
+    <div class="ac"><h5>חיוניות על-תנאי</h5><p>בתנאים רגילים הגוף מייצר אותן, אך במצבי מחלה, לחץ או פגיעה — הדרישה עולה. דוגמאות: גלוטמין, ארגינין, ציסטאין.</p><span class="atag">לחץ / מחלה</span></div>
+    <div class="ac"><h5>לא-חיוניות</h5><p>11 שהגוף מסוגל לסנתז בעצמו. דוגמאות: אלנין, אספרגין, חומצה גלוטמית, סרין.</p><span class="atag">סינתזה עצמית</span></div>
+    <div class="ac"><h5>PDCAAS / DIAAS</h5><p>מדדים לאיכות חלבון. DIAAS בודק ספיגה במעי הדק. חלבון מושלם = ציון 1.0. ביצה וחלב ~1.0; אפונה ~0.6.</p><span class="atag">מדד איכות</span></div>
+    <div class="ac"><h5>דנטורציה</h5><p>שינוי מבנה החלבון עקב חום, pH, או כוח פיזי. ביצה קשה = מדונטר. הדנטורציה אינה הורסת חומצות אמינו — הגוף עדיין מעכל.</p><span class="atag">בישול</span></div>
+    <div class="ac"><h5>מחסור בחלבון</h5><p>קוואשיורקור (מחסור חמור) ומרסמוס (קלוריות+חלבון). בישראל נדיר, אך קיים בקשישים ובתזונות מגבילות.</p><span class="atag">קליני</span></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 8 – FATS ═══ -->
+<div class="slide s8">
+  <div class="left">
+    <div class="slide-title">שומנים וכולסטרול</div>
+    <div class="slide-sub">לא כל שומן הוא האויב — הבחנה בין סוגים חיונית</div>
+    <div class="ft sat"><h5>🔴 שומן רווי</h5><p>קשרים בודדים, מוצק בטמפ' חדר. מקור: בשר, חמאה, שמן קוקוס. קשור להעלאת LDL. WHO: ≤10% מסה"כ קלוריות.</p></div>
+    <div class="ft unsat"><h5>🟢 שומן בלתי-רווי</h5><p>חד-בלתי-רווי (MUFA): שמן זית, אבוקדו — מוריד LDL. רב-בלתי-רווי (PUFA): אומגה-3 (דגים, פשתן) ואומגה-6. חיוניות לתפקוד.</p></div>
+    <div class="ft trans"><h5>🟠 שומן טרנס</h5><p>שומן מוקשה (הידרוגנציה). מעלה LDL ומוריד HDL. אסור ברוב מדינות המערב. WHO: ביטול מלא.</p></div>
+  </div>
+  <div class="right">
+    <div class="cholbox">
+      <h4>כולסטרול וליפופרוטאינים</h4>
+      <div class="chi"><div class="cl hdl">HDL — "הכולסטרול הטוב"</div><p>מפנה כולסטרול מהעורקים לכבד. ≥60 mg/dL — גורם מגן. פעילות גופנית מעלה HDL.</p></div>
+      <div class="chi"><div class="cl ldl">LDL — "הכולסטרול הרע"</div><p>מוביל כולסטרול לרקמות. &lt;100 mg/dL — תקין. שומן רווי ו-טרנס מעלים LDL.</p></div>
+      <div class="chi"><div class="cl neu">טרשת עורקים</div><p>הצטברות LDL מחומצן בדפנות העורקים → פלאק → סיכון ל-MI ואירוע מוחי.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 9 – MICRONUTRIENTS ═══ -->
+<div class="slide s9">
+  <div class="slide-title">מיקרונוטריאנטים — ויטמינים ומינרלים</div>
+  <div class="slide-sub">כמות קטנה — השפעה עצומה. מגוון תזונתי = הגנה מיטבית</div>
+  <div class="mtable">
+    <div class="mcard vit"><div class="mcat">ויטמין</div><h5>ויטמין D</h5><p>ויסות סידן, בריאות עצמות, מערכת חיסון.</p><div class="src">☀️ שמש, דגים שמנים</div></div>
+    <div class="mcard vit"><div class="mcat">ויטמין</div><h5>ויטמין B12</h5><p>מערכת עצבים ויצור תאי דם אדומים.</p><div class="src">🥩 בשר, ביצים, מוצרי חלב</div></div>
+    <div class="mcard vit"><div class="mcat">ויטמין</div><h5>ויטמין C</h5><p>נוגד חמצון, יצור קולגן, ספיגת ברזל.</p><div class="src">🍊 פירות הדר, פלפל אדום</div></div>
+    <div class="mcard vit"><div class="mcat">ויטמין</div><h5>חומצה פולית</h5><p>חיוני להריון, מניעת פגמי צינור עצבי.</p><div class="src">🥬 ירקות עלים, קטניות</div></div>
+    <div class="mcard min"><div class="mcat">מינרל</div><h5>ברזל</h5><p>הובלת חמצן בהמוגלובין. מחסור = אנמיה.</p><div class="src">🥩 בשר אדום, קטניות+C</div></div>
+    <div class="mcard min"><div class="mcat">מינרל</div><h5>סידן</h5><p>עצמות, שיניים, התכווצות שרירים.</p><div class="src">🥛 חלב, ברוקולי, שקדים</div></div>
+    <div class="mcard min"><div class="mcat">מינרל</div><h5>מגנזיום</h5><p>300+ תגובות אנזימטיות, שינה, לחץ דם.</p><div class="src">🥜 אגוזים, דגנים מלאים</div></div>
+    <div class="mcard min"><div class="mcat">מינרל</div><h5>אבץ</h5><p>מערכת חיסון, ריפוי פצעים, חוש ריח.</p><div class="src">🦪 צדפות, בשר, גרעינים</div></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 10 – FOOD GROUPS ═══ -->
+<div class="slide s10">
+  <div class="slide-title">קבוצות המזון — מה אוכלים בטבע?</div>
+  <div class="slide-sub">תזונה מגוונת = כיסוי מיטבי של כל הנוטריאנטים</div>
+  <div class="fgroups">
+    <div class="fg fg1"><div class="fi">🌾</div><h5>דגנים</h5><p>חיטה, שעורה, שיבולת שועל, קינואה, אורז. מקור: פחמימות, סיבים, ברזל, B-vitamins.</p></div>
+    <div class="fg fg2"><div class="fi">🫘</div><h5>קטניות</h5><p>עדשים, חומוס, שעועית, אפונה. עשירות בחלבון, סיבים, ברזל וחומצה פולית.</p></div>
+    <div class="fg fg3"><div class="fi">🥦</div><h5>ירקות ועלים</h5><p>ספנאץ', ברוקולי, כרוב, גזר. צפיפות תזונתית גבוהה, קלוריות נמוכות.</p></div>
+    <div class="fg fg4"><div class="fi">🍎</div><h5>פירות</h5><p>תאנים, תמרים, תפוחים, פירות יער. ויטמינים, מינרלים, סיבים ופיטוכימיקלים.</p></div>
+    <div class="fg fg5"><div class="fi">🫚</div><h5>שמנים, זרעים ואגוזים</h5><p>שמן זית, טחינה, שקדים, זרעי פשתן. MUFA, PUFA, ויטמין E.</p></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 11 – WATER ═══ -->
+<div class="slide s11">
+  <div class="slide-title">💧 מים — הנוטריאנט המושלם</div>
+  <div class="slide-sub">גוף האדם יכול לשרוד שבועות ללא מזון — אבל רק ימים ספורים ללא מים</div>
+  <div class="wfacts">
+    <div class="wf"><div class="big">60%</div><div class="sm">מגוף האדם הוא מים</div></div>
+    <div class="wsep"></div>
+    <div class="wf"><div class="big">2–3L</div><div class="sm">צריכה יומית מומלצת</div></div>
+    <div class="wsep"></div>
+    <div class="wf"><div class="big">75%</div><div class="sm">מהמוח הוא מים</div></div>
+    <div class="wsep"></div>
+    <div class="wf"><div class="big">1–2%</div><div class="sm">התייבשות פוגעת בביצועים</div></div>
+  </div>
+  <div class="wroles">
+    <div class="wr">🔄 הובלת חומרי מזון</div>
+    <div class="wr">🌡️ ויסות חום גוף</div>
+    <div class="wr">🧪 תגובות ביוכימיות</div>
+    <div class="wr">🗑️ פינוי פסולת</div>
+    <div class="wr">🦴 שימון מפרקים</div>
+    <div class="wr">😮 עיכול ובליעה</div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 12 – DIGESTION ═══ -->
+<div class="slide s12">
+  <div class="slide-title">מערכת העיכול — מסע המזון</div>
+  <div class="slide-sub">מהפה ועד ההפרשה — כל שלב קריטי לספיגת הנוטריאנטים</div>
+  <div class="dsteps">
+    <div class="ds"><div class="dn">1</div><div class="dc"><h5>🦷 פה ולעיסה</h5><p>עיכול מכני על ידי השיניים. אמילאז ברוק מתחיל לפרק עמילן. לעיסה איטית = תחושת שובע מוקדמת יותר.</p></div></div>
+    <div class="ds"><div class="dn">2</div><div class="dc"><h5>🔴 קיבה</h5><p>חומצת קיבה (pH ~2) הורגת חיידקים ומפרקת חלבונים. פפסין פועל על חלבונים. מזון שוהה 2–4 שעות.</p></div></div>
+    <div class="ds"><div class="dn">3</div><div class="dc"><h5>💛 מעי דק (6–7 מ')</h5><p>מרה (כבד/כיס מרה) מפרקת שומנים. לבלב מפריש אנזימים. ספיגת ~90% מהנוטריאנטים.</p></div></div>
+    <div class="ds"><div class="dn">4</div><div class="dc"><h5>🟤 מעי גס (1.5 מ')</h5><p>ספיגת מים ומינרלים. חיידקי המיקרוביום מפרקים סיבים, מייצרים ויטמין K ו-B12, ומחזקים חסינות.</p></div></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 13 – FOOD LABELS ═══ -->
+<div class="slide s13">
+  <div class="left">
+    <div class="slide-title">קריאת תוויות מזון</div>
+    <div class="slide-sub">כיצד להפוך מידע לתזונה חכמה</div>
+    <div class="ltips">
+      <div class="ltp"><div class="li">1️⃣</div><div><h5>קחו לב לגודל המנה</h5><p>כל הנתונים מתייחסים ל-100 גרם או למנה אחת. חפיסה שלמה לא = מנה אחת.</p></div></div>
+      <div class="ltp"><div class="li">📋</div><div><h5>רשימת המרכיבים — על פי סדר</h5><p>הרכיב הראשון = הנפוץ ביותר. "סוכר" ברשימה הראשונה? זה המרכיב העיקרי.</p></div></div>
+      <div class="ltp"><div class="li">🔍</div><div><h5>חיפוש סוכר מוסתר</h5><p>סירופ גלוקוז-פרוקטוז, מלטוז, דקסטרוז, שרבט אגבה — כולם סוכר בשמות שונים.</p></div></div>
+      <div class="ltp"><div class="li">🧂</div><div><h5>נתרן vs. מלח</h5><p>נתרן ×2.5 = מלח. גבול יומי: ≤2000 מ"ג נתרן (≈5 גר' מלח) לפי WHO.</p></div></div>
+    </div>
+  </div>
+  <div class="right">
+    <div class="nft">Nutrition Facts</div>
+    <div class="nfs">8 servings per container</div>
+    <div class="nfs"><b>Serving size: 2/3 cup (55g)</b></div>
+    <div class="nfcl">Amount per serving<br><b>Calories</b> <span class="nfcn">230</span></div>
+    <div class="nfr thk"><b>Total Fat</b> 8g <b>10%</b></div>
+    <div class="nfr" style="padding-right:12px">Saturated Fat 1g <b>5%</b></div>
+    <div class="nfr" style="padding-right:12px"><i>Trans</i> Fat 0g</div>
+    <div class="nfr"><b>Cholesterol</b> 0mg <b>0%</b></div>
+    <div class="nfr"><b>Sodium</b> 160mg <b>7%</b></div>
+    <div class="nfr thk"><b>Total Carbohydrate</b> 37g <b>13%</b></div>
+    <div class="nfr" style="padding-right:12px">Dietary Fiber 4g <b>14%</b></div>
+    <div class="nfr" style="padding-right:12px">Total Sugars 12g</div>
+    <div class="nfr"><b>Protein</b> 3g</div>
+    <div class="nfdv">* The % Daily Value tells you how much a nutrient in a serving of food contributes to a daily diet.</div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 14 – QUIZ ═══ -->
+<div class="slide s14">
+  <div class="slide-title">🧠 בדיקת הבנה</div>
+  <div class="slide-sub">לחצו על כרטיס לגלות את התשובה</div>
+  <div class="qgrid">
+    <div class="qc" onclick="this.classList.toggle('rev')">
+      <div class="qn">שאלה 1</div>
+      <div class="qt">מה ההבדל בין חלבון "שלם" לחלבון "חלקי"?</div>
+      <div class="qa">חלבון שלם מכיל את כל 9 חומצות האמינו החיוניות (בשר, ביצים, חלב, סויה, קינואה). חלבון חלקי חסר לפחות אחת — ניתן להשלים על ידי שילוב קטניות + דגנים.</div>
+    </div>
+    <div class="qc" onclick="this.classList.toggle('rev')">
+      <div class="qn">שאלה 2</div>
+      <div class="qt">מדוע שומן טרנס מסוכן יותר משומן רווי?</div>
+      <div class="qa">שומן טרנס גם מעלה LDL (כמו שומן רווי) וגם מוריד HDL — כפל הנזק. כמו כן הוא גורם לדלקתיות ולא מסייע לשום פונקציה בגוף.</div>
+    </div>
+    <div class="qc" onclick="this.classList.toggle('rev')">
+      <div class="qn">שאלה 3</div>
+      <div class="qt">כמה קלוריות יש בגרם שומן לעומת גרם חלבון?</div>
+      <div class="qa">שומן = 9 קלוריות לגרם. חלבון ופחמימות = 4 קלוריות לגרם. שומן הוא פי 2.25 יותר קלורי — זו אחת הסיבות ל"שומן = שמן" (פשטנות!)</div>
+    </div>
+    <div class="qc" onclick="this.classList.toggle('rev')">
+      <div class="qn">שאלה 4</div>
+      <div class="qt">אילו שני מינרלים בסיכון מחסור בצמחונים?</div>
+      <div class="qa">B12 (קיים רק במזון מן החי) וברזל המ (מן החי) שנספג טוב יותר מברזל לא-המ (צמחי). ניתן לשפר ספיגת ברזל צמחי עם ויטמין C.</div>
+    </div>
+  </div>
+  <div class="qhint">💡 לחצו על כרטיס לגלות את התשובה</div>
+</div>
+
+<!-- ═══ SLIDE 15 – SUMMARY ═══ -->
+<div class="slide s15">
+  <div class="slide-title">סיכום שיעור 1</div>
+  <div class="slide-sub">מה לקחנו הביתה היום</div>
+  <div class="sgrid">
+    <div class="si"><div class="sii">🌾</div><h5>פחמימות</h5><p>מונו, די ופוליסכרידים. GI נמוך עדיף. סיבים = חיוניים לבריאות המעי.</p></div>
+    <div class="si"><div class="sii">💪</div><h5>חלבונים</h5><p>9 חומצות אמינו חיוניות. חלבון שלם vs. חלקי. השלמה עם קטניות+דגנים.</p></div>
+    <div class="si"><div class="sii">🥑</div><h5>שומנים</h5><p>לא כל שומן רע! MUFA ו-PUFA מגינים. שומן טרנס — להימנע לחלוטין.</p></div>
+    <div class="si"><div class="sii">💊</div><h5>מיקרונוטריאנטים</h5><p>ויטמינים ומינרלים — כמות קטנה, השפעה עצומה. מגוון = הגנה.</p></div>
+    <div class="si"><div class="sii">💧</div><h5>מים</h5><p>60% מגוף האדם. 2-3 ליטר ביום. התייבשות קלה פוגעת בביצועים.</p></div>
+    <div class="si"><div class="sii">🔍</div><h5>קריאת תוויות</h5><p>בדקו גודל מנה, סדר מרכיבים, וזהו סוכר מוסתר בשמות שונים.</p></div>
+  </div>
+  <div class="nxtbox">📌 שיעור הבא: <strong>פחמימות לעומק</strong> — סוכרים טבעיים ומלאכותיים, אינסולין, תנגודת לאינסולין ותסמונת מטבולית</div>
+</div>
+
+<!-- ═══ NAV ═══ -->
+</div>
+<div class="nav">
+  <button id="prevBtn" onclick="go(-1)" disabled>→</button>
+  <div class="dots" id="dots"></div>
+  <div class="slide-counter" id="ctr">1 / 15</div>
+  <button id="nextBtn" onclick="go(1)">←</button>
+</div>
+
+
+
+<script>
+  let cur = 0;
+  const deck = document.getElementById('deck');
+  const slides = deck.querySelectorAll('.slide');
+  const n = slides.length;
+  const dc = document.getElementById('dots');
+  const ctr = document.getElementById('ctr');
+  for (let i = 0; i < n; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => goTo(i);
+    dc.appendChild(d);
+  }
+  function goTo(i) {
+    if (i < 0 || i >= n) return;
+    slides[cur].classList.remove('active');
+    dc.children[cur].classList.remove('active');
+    cur = i;
+    slides[cur].classList.add('active');
+    dc.children[cur].classList.add('active');
+    ctr.textContent = (cur + 1) + ' / ' + n;
+    document.getElementById('prevBtn').disabled = cur === 0;
+    document.getElementById('nextBtn').disabled = cur === n - 1;
+  }
+  function go(d) { goTo(cur + d); }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   go(1);
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') go(-1);
+  });
+</script>
+
+</body>
+</html>
