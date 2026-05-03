@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>שיעור 4 – שומנים וכולסטרול | תזונה טבעית-נבונה</title>
+<link href="https://fonts.googleapis.com/css2?family=Secular+One&family=Heebo:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#080e0a; --green:#4caf7d; --green-dim:rgba(76,175,125,.12); --green-border:rgba(76,175,125,.3);
+    --cream:#f5f0e8; --muted:rgba(245,240,232,.55);
+    --card:rgba(255,255,255,.04); --border:rgba(255,255,255,.08);
+    --red:#e84343; --orange:#ff9050; --blue:#4a9eff; --gold:#c8a84b;
+    --fat:#90e050; --fat-dim:rgba(144,224,80,.1); --fat-border:rgba(144,224,80,.25);
+  }
+  html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;}
+  body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--cream);direction:rtl;}
+  *{box-sizing:border-box;}
+  #deck{position:relative;width:100%;height:100%;overflow:hidden;}
+  .slide{position:absolute;inset:0;display:none;overflow:hidden;}
+  .slide.active{display:flex;}
+  .slide-title{font-family:'Secular One',sans-serif;font-size:clamp(24px,3.4vw,42px);line-height:1.15;margin-bottom:8px;}
+  .slide-sub{font-size:15px;color:var(--muted);margin-bottom:26px;line-height:1.6;}
+  .nav{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:14px;background:rgba(8,14,10,.9);backdrop-filter:blur(14px);border:1px solid var(--fat-border);border-radius:50px;padding:9px 22px;z-index:1000;}
+  .nav button{background:none;border:none;color:var(--fat);font-size:17px;cursor:pointer;padding:4px 10px;border-radius:20px;transition:all .2s;}
+  .nav button:hover{background:var(--fat-dim);}
+  .nav button:disabled{opacity:.25;cursor:default;}
+  .slide-counter{color:var(--muted);font-size:13px;min-width:65px;text-align:center;}
+  .dots{display:flex;gap:5px;}
+  .dot{width:6px;height:6px;border-radius:50%;background:rgba(144,224,80,.2);cursor:pointer;transition:all .3s;}
+  .dot.active{background:var(--fat);transform:scale(1.5);}
+
+  /* S1 */
+  .s1{flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;background:radial-gradient(ellipse 80% 60% at 50% 40%,#0e2008,var(--bg));}
+  .s1::before{content:'';position:absolute;inset:0;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 10 C70 10 90 30 90 50 C90 70 70 90 50 90 C30 90 10 70 10 50 C10 30 30 10 50 10' fill='none' stroke='%2390e050' stroke-width='1'/%3E%3C/svg%3E");background-size:100px 100px;}
+  .s1 .lbl{font-size:12px;letter-spacing:4px;color:var(--fat);opacity:.7;margin-bottom:16px;position:relative;}
+  .s1 h1{font-family:'Secular One',sans-serif;font-size:clamp(36px,5vw,66px);line-height:1.05;color:var(--cream);position:relative;}
+  .s1 h1 em{color:var(--fat);font-style:normal;}
+  .s1 .sub{font-size:17px;color:var(--muted);margin-top:16px;max-width:600px;position:relative;}
+  .s1 .pills{display:flex;gap:12px;margin-top:38px;flex-wrap:wrap;justify-content:center;position:relative;}
+  .pill{padding:8px 18px;border-radius:25px;font-size:14px;font-weight:600;background:var(--fat-dim);border:1px solid var(--fat-border);color:var(--fat);}
+  .s1 .warn{position:absolute;bottom:88px;font-size:14px;color:var(--fat);opacity:.5;}
+
+  /* S2 */
+  .s2{flex-direction:row;}
+  .s2bar{width:280px;flex-shrink:0;background:linear-gradient(160deg,#0e2008,var(--bg));padding:50px 32px;border-left:1px solid var(--border);}
+  .s2bar .ico{font-size:55px;margin-bottom:18px;}
+  .s2bar h2{font-family:'Secular One',sans-serif;font-size:28px;color:var(--fat);margin-bottom:10px;}
+  .s2bar p{font-size:14px;color:var(--muted);line-height:1.6;}
+  .s2body{flex:1;padding:50px 55px;display:flex;flex-direction:column;justify-content:center;}
+  .s2body h3{font-size:11px;letter-spacing:3px;color:var(--fat);opacity:.6;text-transform:uppercase;margin-bottom:22px;}
+  .ag{display:flex;align-items:flex-start;gap:16px;padding:12px 0;border-bottom:1px solid var(--border);}
+  .ag:last-child{border:none;}
+  .ag .n{font-family:'Secular One',sans-serif;font-size:26px;color:var(--fat);opacity:.3;min-width:30px;}
+  .ag h4{font-size:15px;font-weight:700;color:var(--cream);margin-bottom:2px;}
+  .ag p{font-size:13px;color:var(--muted);}
+
+  /* S3 FAT BASICS */
+  .s3{flex-direction:column;padding:50px 70px;justify-content:center;}
+  .s3 .slide-title{color:var(--fat);}
+  .fat-roles{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+  .fr{padding:20px;border-radius:12px;text-align:center;background:var(--card);border:1px solid var(--border);}
+  .fr .fi{font-size:32px;margin-bottom:10px;}
+  .fr h5{font-size:14px;font-weight:700;color:var(--fat);margin-bottom:6px;}
+  .fr p{font-size:12px;color:var(--muted);line-height:1.5;}
+  .calbox{padding:14px 20px;background:var(--fat-dim);border:1px solid var(--fat-border);border-radius:10px;font-size:14px;color:var(--cream);}
+
+  /* S4 FAT TYPES */
+  .s4{flex-direction:column;padding:50px 70px;justify-content:center;background:#080e04;}
+  .s4 .slide-title{color:var(--fat);}
+  .fat-types{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  .ftc{padding:22px;border-radius:12px;border-right:4px solid;}
+  .ftc.sat  {background:rgba(232,67,67,.07); border-color:var(--red);}
+  .ftc.mufa {background:rgba(144,224,80,.07); border-color:var(--fat);}
+  .ftc.pufa {background:rgba(74,158,255,.07); border-color:var(--blue);}
+  .ftc.trans{background:rgba(245,166,35,.07); border-color:var(--gold);}
+  .ftc h5{font-size:16px;font-weight:700;margin-bottom:8px;}
+  .ftc.sat   h5{color:var(--red);}
+  .ftc.mufa  h5{color:var(--fat);}
+  .ftc.pufa  h5{color:var(--blue);}
+  .ftc.trans h5{color:var(--gold);}
+  .ftc ul{padding-right:16px;}
+  .ftc ul li{font-size:13px;color:var(--muted);margin-bottom:5px;line-height:1.5;}
+
+  /* S5 ESSENTIAL FA */
+  .s5{flex-direction:row;}
+  .s5 .left{flex:1;padding:50px;display:flex;flex-direction:column;justify-content:center;}
+  .s5 .slide-title{color:var(--blue);}
+  .s5 .right{width:300px;padding:50px 35px;display:flex;flex-direction:column;justify-content:center;background:rgba(74,158,255,.05);border-right:1px solid rgba(74,158,255,.15);}
+  .efa-card{padding:18px 20px;border-radius:10px;margin-bottom:14px;background:var(--card);}
+  .efa-card h5{font-size:15px;font-weight:700;margin-bottom:8px;}
+  .efa-card.o3{border-right:3px solid var(--blue);}
+  .efa-card.o3 h5{color:var(--blue);}
+  .efa-card.o6{border-right:3px solid var(--orange);}
+  .efa-card.o6 h5{color:var(--orange);}
+  .efa-card ul{padding-right:16px;}
+  .efa-card ul li{font-size:13px;color:var(--muted);margin-bottom:4px;line-height:1.5;}
+  .ratio-box{padding:14px;background:var(--card);border-radius:10px;border:1px solid rgba(74,158,255,.2);}
+  .ratio-box h4{font-family:'Secular One',sans-serif;font-size:17px;color:var(--blue);margin-bottom:12px;}
+  .ratio-item{margin-bottom:10px;}
+  .ratio-item .rl{display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px;}
+  .ratio-item .rt{height:10px;background:rgba(255,255,255,.08);border-radius:5px;overflow:hidden;}
+  .ratio-item .rf{height:100%;border-radius:5px;}
+  .rf-good{background:linear-gradient(90deg,var(--blue),#80c0ff);}
+  .rf-bad {background:linear-gradient(90deg,var(--red),#ff8080);}
+
+  /* S6 CHOLESTEROL */
+  .s6{flex-direction:column;padding:50px 70px;justify-content:center;background:#0a1205;}
+  .s6 .slide-title{color:var(--fat);}
+  .chol-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .chol-card{padding:22px;border-radius:12px;}
+  .chol-card.what{background:var(--fat-dim);border:1px solid var(--fat-border);}
+  .chol-card.lipo{background:var(--card);border:1px solid var(--border);}
+  .chol-card h5{font-size:16px;font-weight:700;margin-bottom:10px;}
+  .chol-card.what h5{color:var(--fat);}
+  .chol-card.lipo h5{color:var(--blue);}
+  .chol-card ul{padding-right:16px;}
+  .chol-card ul li{font-size:13px;color:var(--muted);margin-bottom:6px;line-height:1.5;}
+  .lipo-compare{display:flex;flex-direction:column;gap:10px;margin-top:10px;}
+  .lc{padding:12px;border-radius:8px;border-right:3px solid;}
+  .lc.hdl{background:rgba(76,175,125,.08);border-color:var(--green);}
+  .lc.ldl{background:rgba(232,67,67,.08);border-color:var(--red);}
+  .lc.vldl{background:rgba(245,166,35,.08);border-color:var(--gold);}
+  .lc h6{font-size:13px;font-weight:700;margin-bottom:3px;}
+  .lc.hdl h6{color:var(--green);}
+  .lc.ldl h6{color:var(--red);}
+  .lc.vldl h6{color:var(--gold);}
+  .lc p{font-size:12px;color:var(--muted);}
+
+  /* S7 ATHEROSCLEROSIS */
+  .s7{flex-direction:column;padding:50px 70px;justify-content:center;background:#1a0808;}
+  .s7 .slide-title{color:var(--red);}
+  .ath-steps{display:flex;align-items:stretch;gap:0;margin-bottom:22px;}
+  .ath-step{flex:1;padding:18px 14px;text-align:center;background:var(--card);border:1px solid var(--border);position:relative;}
+  .ath-step:not(:last-child)::after{content:'←';position:absolute;left:-12px;top:50%;transform:translateY(-50%);font-size:18px;color:rgba(232,67,67,.4);z-index:1;}
+  .ath-step .as-num{font-family:'Secular One',sans-serif;font-size:28px;color:var(--red);opacity:.3;margin-bottom:5px;}
+  .ath-step h5{font-size:13px;font-weight:700;color:var(--red);margin-bottom:6px;}
+  .ath-step p{font-size:11px;color:var(--muted);line-height:1.5;}
+  .risk-factors{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .rf-card{padding:16px 20px;border-radius:10px;background:var(--card);border:1px solid var(--border);}
+  .rf-card h5{font-size:14px;font-weight:700;margin-bottom:8px;}
+  .rf-card.bad h5{color:var(--red);}
+  .rf-card.good h5{color:var(--green);}
+  .rf-card ul{padding-right:16px;}
+  .rf-card ul li{font-size:13px;color:var(--muted);margin-bottom:4px;line-height:1.5;}
+
+  /* S8 MEDITERRANEAN */
+  .s8{flex-direction:row;background:#080e0a;}
+  .s8 .left{flex:1;padding:50px;display:flex;flex-direction:column;justify-content:center;}
+  .s8 .slide-title{color:var(--fat);}
+  .s8 .right{width:290px;padding:50px 35px;display:flex;flex-direction:column;justify-content:center;background:var(--fat-dim);border-right:1px solid var(--fat-border);}
+  .med-benefits{display:flex;flex-direction:column;gap:12px;}
+  .mb{display:flex;gap:14px;align-items:flex-start;padding:13px 16px;background:var(--card);border-radius:9px;border-right:3px solid var(--fat);}
+  .mb .mi{font-size:20px;flex-shrink:0;}
+  .mb h5{font-size:14px;font-weight:700;color:var(--fat);margin-bottom:2px;}
+  .mb p{font-size:13px;color:var(--muted);line-height:1.5;}
+  .olive-facts h4{font-family:'Secular One',sans-serif;font-size:18px;color:var(--fat);margin-bottom:14px;}
+  .of-item{margin-bottom:12px;padding:10px;background:var(--card);border-radius:8px;}
+  .of-item .ofl{font-size:13px;font-weight:700;color:var(--fat);margin-bottom:2px;}
+  .of-item p{font-size:12px;color:var(--muted);}
+
+  /* S9 OMEGA 3 */
+  .s9{flex-direction:column;padding:50px 70px;justify-content:center;}
+  .s9 .slide-title{color:var(--blue);}
+  .omega3-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px;}
+  .o3c{padding:20px;border-radius:12px;background:var(--card);border:1px solid rgba(74,158,255,.2);}
+  .o3c .o3ico{font-size:30px;margin-bottom:10px;}
+  .o3c h5{font-size:14px;font-weight:700;color:var(--blue);margin-bottom:8px;}
+  .o3c ul{padding-right:14px;}
+  .o3c ul li{font-size:12px;color:var(--muted);margin-bottom:4px;line-height:1.5;}
+  .o3-note{padding:14px 20px;background:rgba(74,158,255,.07);border:1px solid rgba(74,158,255,.2);border-radius:10px;font-size:13px;color:var(--muted);line-height:1.6;}
+  .o3-note strong{color:var(--blue);}
+
+  /* S10 FATS AND DISEASE */
+  .s10{flex-direction:column;padding:50px 70px;justify-content:center;background:#0a0808;}
+  .s10 .slide-title{color:var(--cream);}
+  .disease-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+  .dc{padding:20px;border-radius:12px;background:var(--card);border:1px solid var(--border);}
+  .dc .d-ico{font-size:28px;margin-bottom:8px;}
+  .dc h5{font-size:14px;font-weight:700;margin-bottom:8px;color:var(--cream);}
+  .dc p{font-size:12px;color:var(--muted);line-height:1.6;}
+  .dc .d-verdict{margin-top:10px;font-size:12px;padding:7px 10px;border-radius:6px;}
+  .d-good{background:rgba(76,175,125,.1);color:var(--green);}
+  .d-bad {background:rgba(232,67,67,.1);color:var(--red);}
+  .d-neutral{background:rgba(200,168,75,.1);color:var(--gold);}
+
+  /* S11 READING LABELS */
+  .s11{flex-direction:row;background:#080e0a;}
+  .s11 .left{flex:1;padding:50px;display:flex;flex-direction:column;justify-content:center;}
+  .s11 .slide-title{color:var(--fat);}
+  .label-tips{display:flex;flex-direction:column;gap:12px;}
+  .lt{display:flex;gap:14px;align-items:flex-start;padding:13px 16px;background:var(--card);border-radius:9px;border-right:3px solid var(--fat);}
+  .lt .li{font-size:21px;flex-shrink:0;}
+  .lt h5{font-size:14px;font-weight:700;color:var(--fat);margin-bottom:2px;}
+  .lt p{font-size:13px;color:var(--muted);line-height:1.5;}
+  .s11 .right{width:290px;padding:50px 32px;display:flex;flex-direction:column;justify-content:center;background:var(--fat-dim);border-right:1px solid var(--fat-border);}
+  .oils-rank h4{font-family:'Secular One',sans-serif;font-size:17px;color:var(--fat);margin-bottom:14px;}
+  .oil-item{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);}
+  .oil-item:last-child{border:none;}
+  .oil-item .on{font-size:13px;color:var(--cream);}
+  .oil-item .osc{font-size:12px;font-weight:700;}
+  .osc-g{color:var(--green);}
+  .osc-y{color:var(--gold);}
+  .osc-r{color:var(--red);}
+
+  /* S12 LIPID PANEL */
+  .s12{flex-direction:column;padding:50px 70px;justify-content:center;background:#080c10;}
+  .s12 .slide-title{color:var(--blue);}
+  .panel-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px;}
+  .pg{padding:18px 12px;border-radius:10px;text-align:center;background:var(--card);border:1px solid var(--border);}
+  .pg .pg-name{font-size:12px;color:var(--muted);margin-bottom:6px;}
+  .pg .pg-val{font-family:'Secular One',sans-serif;font-size:22px;margin-bottom:4px;}
+  .pg .pg-unit{font-size:10px;color:var(--muted);}
+  .pg .pg-range{margin-top:8px;font-size:11px;padding:3px 8px;border-radius:10px;}
+  .pg.hdl .pg-val{color:var(--green);}  .pg.hdl .pg-range{background:rgba(76,175,125,.15);color:var(--green);}
+  .pg.ldl .pg-val{color:var(--red);}    .pg.ldl .pg-range{background:rgba(232,67,67,.15);color:var(--red);}
+  .pg.tg  .pg-val{color:var(--orange);}  .pg.tg  .pg-range{background:rgba(255,144,80,.15);color:var(--orange);}
+  .pg.tc  .pg-val{color:var(--blue);}   .pg.tc  .pg-range{background:rgba(74,158,255,.15);color:var(--blue);}
+  .pg.nonhdl .pg-val{color:var(--gold);} .pg.nonhdl .pg-range{background:rgba(200,168,75,.15);color:var(--gold);}
+  .med-tips{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .mt{padding:16px;border-radius:9px;background:var(--card);border:1px solid var(--border);}
+  .mt h5{font-size:14px;font-weight:700;margin-bottom:6px;}
+  .mt.raise h5{color:var(--green);}
+  .mt.lower h5{color:var(--red);}
+  .mt ul{padding-right:14px;}
+  .mt ul li{font-size:12px;color:var(--muted);margin-bottom:3px;line-height:1.5;}
+
+  /* S13 DIET MYTHS */
+  .s13{flex-direction:column;padding:50px 70px;justify-content:center;background:#080e0a;}
+  .s13 .slide-title{color:var(--fat);}
+  .myths{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .myth{padding:20px;border-radius:12px;background:var(--card);border:1px solid var(--border);}
+  .myth .mt-top{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start;}
+  .myth .mt-ico{font-size:22px;flex-shrink:0;}
+  .myth .mt-claim{font-size:14px;font-weight:700;color:rgba(200,232,160,.9);}
+  .myth .truth{font-size:13px;color:var(--muted);line-height:1.6;padding:11px;background:var(--fat-dim);border-radius:8px;border-right:3px solid var(--fat);}
+
+  /* S14 QUIZ */
+  .s14{flex-direction:column;align-items:center;justify-content:center;padding:50px 80px;text-align:center;background:radial-gradient(ellipse 80% 60% at 50% 50%,#0e2008,var(--bg));}
+  .s14 .slide-title{color:var(--fat);margin-bottom:8px;}
+  .s14 .slide-sub{margin-bottom:32px;}
+  .qgrid{display:grid;grid-template-columns:1fr 1fr;gap:15px;width:100%;max-width:800px;}
+  .qc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;cursor:pointer;transition:all .3s;text-align:right;}
+  .qc:hover{background:rgba(255,255,255,.07);transform:translateY(-2px);}
+  .qc.rev{background:var(--fat-dim);border-color:var(--fat-border);}
+  .qc .qn{font-size:11px;color:var(--muted);margin-bottom:7px;}
+  .qc .qt{font-size:15px;color:var(--cream);font-weight:600;}
+  .qc .qa{margin-top:9px;font-size:13px;color:rgba(144,224,80,.9);display:none;line-height:1.6;}
+  .qc.rev .qa{display:block;}
+  .qhint{margin-top:12px;font-size:12px;color:rgba(255,255,255,.25);}
+
+  /* S15 SUMMARY */
+  .s15{flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:50px 80px;position:relative;}
+  .s15::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 50%,rgba(144,224,80,.08),transparent 70%);}
+  .s15 .slide-title{color:var(--fat);position:relative;margin-bottom:8px;}
+  .s15 .slide-sub{position:relative;margin-bottom:32px;}
+  .sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;width:100%;max-width:860px;position:relative;}
+  .si{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;text-align:right;}
+  .si .sii{font-size:24px;margin-bottom:8px;}
+  .si h5{font-size:15px;font-weight:700;color:var(--fat);margin-bottom:5px;}
+  .si p{font-size:13px;color:var(--muted);line-height:1.5;}
+  .nxtbox{margin-top:24px;padding:13px 26px;position:relative;background:var(--fat-dim);border:1px solid var(--fat-border);border-radius:10px;font-size:14px;color:var(--fat);}
+  .nxtbox strong{color:var(--cream);}
+</style>
+</head>
+<body>
+<div id="deck">
+
+<!-- S1 TITLE -->
+<div class="slide s1 active">
+  <div class="lbl">תזונה טבעית-נבונה · שיעור 4 מתוך 20</div>
+  <h1>שומנים, כולסטרול<br>ו<em>בריאות הלב</em></h1>
+  <div class="sub">מהמולקולה הכי קלורית ועד תסמונת הלב הכלילית — המדע המלא על שומן</div>
+  <div class="pills">
+    <span class="pill">🫒 שומן רווי ובלתי-רווי</span>
+    <span class="pill">🐟 אומגה 3/6</span>
+    <span class="pill">💛 HDL ו-LDL</span>
+    <span class="pill">❤️ טרשת עורקים</span>
+  </div>
+  <div class="warn">⚠️ מחלות לב-כלי דם = סיבת המוות מספר 1 בעולם — תזונה אחראית ל-~40% מהמקרים</div>
+</div>
+
+<!-- S2 AGENDA -->
+<div class="slide s2">
+  <div class="s2bar">
+    <div class="ico">🥑</div>
+    <h2>תוכן השיעור</h2>
+    <p>שיעור 4 מכסה את כל היבטי השומן — מהכימיה ועד מניעת מחלות לב</p>
+  </div>
+  <div class="s2body">
+    <h3>סדר יום</h3>
+    <div class="ag"><div class="n">01</div><div><h4>מה זה שומן ולמה אנחנו צריכים אותו?</h4><p>תפקידים חיוניים, 9 קל/גרם, מסיסות</p></div></div>
+    <div class="ag"><div class="n">02</div><div><h4>סוגי שומנים — כימיה ותפקוד</h4><p>רווי, חד-בלתי-רווי, רב-בלתי-רווי, טרנס</p></div></div>
+    <div class="ag"><div class="n">03</div><div><h4>חומצות שומן חיוניות — אומגה 3/6</h4><p>EPA, DHA, ALA, לינולאית — תפקידים ומקורות</p></div></div>
+    <div class="ag"><div class="n">04</div><div><h4>כולסטרול וליפופרוטאינים</h4><p>HDL, LDL, VLDL, טריגליצרידים — מה כל מדד אומר</p></div></div>
+    <div class="ag"><div class="n">05</div><div><h4>טרשת עורקים — מנגנון מלא</h4><p>שלב אחר שלב — מהנזק עד להתקף הלב</p></div></div>
+    <div class="ag"><div class="n">06</div><div><h4>דיאטת הים-תיכון ושמן זית</h4><p>PREDIMED, הראיות, ויישום מעשי</p></div></div>
+    <div class="ag"><div class="n">07</div><div><h4>פאנל שומנים בדם ומיתוסים</h4><p>כיצד לקרוא בדיקת דם ולהתאים תפריט</p></div></div>
+  </div>
+</div>
+
+<!-- S3 FAT BASICS -->
+<div class="slide s3">
+  <div class="slide-title">שומן — הנוטריאנט הכי אנרגטי</div>
+  <div class="slide-sub">9 קלוריות לגרם · מסיס בשמן · חיוני לחיים — לא אויב, אלא בעל ברית חיוני</div>
+  <div class="fat-roles">
+    <div class="fr"><div class="fi">🧱</div><h5>ממברנות תאים</h5><p>פוספוליפידים יוצרים כל ממברנת תא בגוף. בלי שומן = אין תאים.</p></div>
+    <div class="fr"><div class="fi">💊</div><h5>ויטמינים A,D,E,K</h5><p>ארבעת ויטמינים אלה מסיסים בשומן בלבד. ללא שומן — לא נספגים.</p></div>
+    <div class="fr"><div class="fi">🧠</div><h5>60% מהמוח שומן</h5><p>DHA — חומצת שומן אומגה 3 — עושה 15% ממשקל קליפת המוח.</p></div>
+    <div class="fr"><div class="fi">⚡</div><h5>אנרגיה לטווח ארוך</h5><p>בצום ובפעילות ממושכת — שומן = מקור האנרגיה העיקרי. 9 קל/גרם vs 4 קל/גרם לפחמימות.</p></div>
+  </div>
+  <div class="calbox">🌡️ <strong>חשיבות הורמונלית:</strong> שומן הוא חומר גלם לסינתזת הורמוני מין (אסטרוגן, טסטוסטרון), קורטיזול, ואלדוסטרון. דיאטה עם שומן מאוד נמוך (&lt;15%) עלולה לשבש ייצור הורמונים.</div>
+</div>
+
+<!-- S4 FAT TYPES -->
+<div class="slide s4">
+  <div class="slide-title">4 סוגי שומנים — כימיה ותפקוד</div>
+  <div class="slide-sub">מספר קשרים כפולים בשרשרת הפחמן קובע את המבנה, הצורה, וההשפעה הבריאותית</div>
+  <div class="fat-types">
+    <div class="ftc sat">
+      <h5>🔴 שומן רווי (Saturated)</h5>
+      <ul>
+        <li>אין קשרים כפולים — "רווי" במימן</li>
+        <li>מוצק בטמפ' חדר (חמאה, שומן בקר)</li>
+        <li>יציב — לא מתחמצן, טוב לבישול בחום גבוה</li>
+        <li>מעלה LDL ו-HDL — השפעה מורכבת</li>
+        <li>מקורות: בשר אדום, חמאה, שמן קוקוס, גבינה</li>
+        <li>המלצה: ≤10% מסה"כ קלוריות (WHO/AHA)</li>
+      </ul>
+    </div>
+    <div class="ftc mufa">
+      <h5>🟢 חד-בלתי-רווי MUFA</h5>
+      <ul>
+        <li>קשר כפול אחד — נוזלי בטמפ' חדר</li>
+        <li>מוריד LDL, לא פוגע ב-HDL</li>
+        <li>עמיד יחסית לחמצון — טוב לבישול</li>
+        <li>קשור לבריאות לב (דיאטה ים-תיכונית)</li>
+        <li>מקורות: שמן זית, אבוקדו, שקדים, אגוזי קשיו</li>
+        <li>המלצה: עיקר השומן בתפריט</li>
+      </ul>
+    </div>
+    <div class="ftc pufa">
+      <h5>🔵 רב-בלתי-רווי PUFA</h5>
+      <ul>
+        <li>2+ קשרים כפולים — נוזלי, רגיש לחמצון</li>
+        <li>כולל אומגה 3 ואומגה 6 — חיוניות לגוף</li>
+        <li>מוריד LDL וטריגליצרידים (אומגה 3)</li>
+        <li>אנטי-דלקתי (EPA, DHA) בניגוד לאומגה 6</li>
+        <li>מקורות: דגים, זרעי פשתן, אגוזי מלך, שמן קנולה</li>
+        <li>לא מומלץ לבישול בחום גבוה — מתחמצן</li>
+      </ul>
+    </div>
+    <div class="ftc trans">
+      <h5>🟠 שומן טרנס</h5>
+      <ul>
+        <li>מלאכותי: הידרוגנציה של שמן צמחי</li>
+        <li>קיים גם באופן טבעי קצת (בקר, חלב) — בכמות זעירה</li>
+        <li>מעלה LDL + מוריד HDL = כפל הנזק</li>
+        <li>דלקתיות מוגברת, NAFLD, עמידות לאינסולין</li>
+        <li>אסור בארה"ב, EU. ישראל: הגבלה חלקית</li>
+        <li>ספינת הדגל: מרגרינה ישנה, מאפים תעשייתיים</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- S5 ESSENTIAL FA -->
+<div class="slide s5">
+  <div class="left">
+    <div class="slide-title">חומצות שומן חיוניות — אומגה 3 ואומגה 6</div>
+    <div class="slide-sub">הגוף לא יכול לייצר אותן — חייבות להגיע מהמזון. האיזון ביניהן קריטי</div>
+    <div class="efa-card o3">
+      <h5>🔵 אומגה 3 — ALA, EPA, DHA</h5>
+      <ul>
+        <li><strong>ALA</strong> (חומצה אלפא-לינולנית): פשתן, צ'יה, אגוזי מלך. הגוף ממיר לEPA/DHA — אבל המרה נמוכה (5–15%)</li>
+        <li><strong>EPA</strong>: אנטי-דלקתי חזק, מוריד טריגליצרידים, מגן לב</li>
+        <li><strong>DHA</strong>: 15% ממשקל קליפת המוח, חיוני לראייה ולהתפתחות עצבית</li>
+        <li>מקורות EPA/DHA: סלמון, מקרל, סרדינים, טונה, שמן דגים, אצות (טבעוני!)</li>
+      </ul>
+    </div>
+    <div class="efa-card o6">
+      <h5>🟠 אומגה 6 — לינולאית וארכידונית</h5>
+      <ul>
+        <li><strong>לינולאית (LA)</strong>: שכיחה מאוד — שמן תירס, שמן סויה, אגוזי אדמה</li>
+        <li>הגוף ממיר ל-<strong>ארכידונית (AA)</strong> — פרקורסור לאיקוסנואידים דלקתיים</li>
+        <li>ב<em>כמות נכונה</em> — חיונית. ב<em>עודף</em> — תחרות עם אומגה 3 על אנזימים</li>
+      </ul>
+    </div>
+  </div>
+  <div class="right">
+    <div class="ratio-box">
+      <h4>יחס אומגה 6:3 — קריטי!</h4>
+      <div class="ratio-item">
+        <div class="rl"><span>אבות אדם (אבולוציה)</span><span style="color:var(--green)">1:1 – 4:1</span></div>
+        <div class="rt"><div class="rf rf-good" style="width:25%"></div></div>
+      </div>
+      <div class="ratio-item">
+        <div class="rl"><span>דיאטה ים-תיכונית</span><span style="color:var(--green)">4:1</span></div>
+        <div class="rt"><div class="rf rf-good" style="width:25%"></div></div>
+      </div>
+      <div class="ratio-item">
+        <div class="rl"><span>ממוצע מערבי כיום</span><span style="color:var(--red)">15:1 – 20:1</span></div>
+        <div class="rt"><div class="rf rf-bad" style="width:90%"></div></div>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-top:12px;line-height:1.6;">יחס גבוה → דלקתיות מוגברת, תנגודת לאינסולין, סיכון CVD. הסיבה: מנות ענק של שמנים צמחיים תעשייתיים.</div>
+    </div>
+  </div>
+</div>
+
+<!-- S6 CHOLESTEROL -->
+<div class="slide s6">
+  <div class="slide-title">כולסטרול וליפופרוטאינים — המדע האמיתי</div>
+  <div class="slide-sub">כולסטרול חיוני לחיים — הבעיה היא לא הכולסטרול, אלא הנשאים שלו</div>
+  <div class="chol-grid">
+    <div class="chol-card what">
+      <h5>🌿 מה זה כולסטרול?</h5>
+      <ul>
+        <li>סטרול שומני — חיוני לכל ממברנת תא</li>
+        <li>80% מיוצר בכבד (אנדוגני), 20% מהמזון</li>
+        <li>חומר גלם להורמוני מין, ויטמין D, חומצות מרה</li>
+        <li>אינו מסיס במים — מועבר בדם על גבי ליפופרוטאינים</li>
+        <li>כולסטרול תזונתי השפעתו מוגבלת — הכבד מפצה</li>
+        <li>הגבלת ביצים: ה-AHA ביטלה את מגבלת 300 מ"ג ב-2015</li>
+      </ul>
+    </div>
+    <div class="chol-card lipo">
+      <h5>🚢 ליפופרוטאינים — הנשאים</h5>
+      <div class="lipo-compare">
+        <div class="lc hdl"><h6>HDL — "הטוב" ≥60 mg/dL מגן</h6><p>מפנה כולסטרול מעורקים לכבד (סילוק). נמוך: &lt;40 גברים/&lt;50 נשים — גורם סיכון עצמאי. העלאה: פעילות גופנית, אומגה 3, אלכוהול מתון.</p></div>
+        <div class="lc ldl"><h6>LDL — "הרע" &lt;100 mg/dL תקין</h6><p>מוביל כולסטרול לרקמות. LDL מחומצן ← נאכל ע"י מקרופאגים ← פלאק. שומן רווי + טרנס מעלים LDL. סטטינים מורידים.</p></div>
+        <div class="lc vldl"><h6>VLDL + טריגליצרידים &lt;150 mg/dL</h6><p>נוצר בכבד. נושא טריגליצרידים לרקמות. רמה גבוהה: תנגודת אינסולין, HFCS. נורמלי: &lt;150 mg/dL.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S7 ATHEROSCLEROSIS -->
+<div class="slide s7">
+  <div class="slide-title">טרשת עורקים — מנגנון צעד אחר צעד</div>
+  <div class="slide-sub">תהליך דלקתי כרוני שמתחיל בגיל 20 ומסתיים בהתקף לב — אבל ניתן למניעה</div>
+  <div class="ath-steps">
+    <div class="ath-step"><div class="as-num">1</div><h5>נזק לאנדותל</h5><p>עשן, לחץ דם, סוכר גבוה, שומן טרנס פוגעים בציפוי הפנימי של העורק</p></div>
+    <div class="ath-step"><div class="as-num">2</div><h5>חדירת LDL</h5><p>LDL חודר לתוך דפנות העורק ועובר חמצון (ox-LDL) ← גורם לדלקת</p></div>
+    <div class="ath-step"><div class="as-num">3</div><h5>מקרופאגים</h5><p>תאי חיסון בולעים ox-LDL ← תאי קצף (foam cells) ← שכבת שמן</p></div>
+    <div class="ath-step"><div class="as-num">4</div><h5>פלאק</h5><p>הצטברות תאי קצף, סידן, סיבי קולגן ← פלאק שמצמצם lumen העורק</p></div>
+    <div class="ath-step"><div class="as-num">5</div><h5>קרע ו-MI</h5><p>פלאק לא יציב נקרע ← קריש דם (thrombosis) ← חסימה מלאה ← התקף לב/שבץ</p></div>
+  </div>
+  <div class="risk-factors">
+    <div class="rf-card bad">
+      <h5>⬆️ מגבירי סיכון</h5>
+      <ul>
+        <li>LDL גבוה, HDL נמוך, טריגליצרידים גבוהים</li>
+        <li>עישון (נזק ישיר לאנדותל)</li>
+        <li>יתר לחץ דם (כוח מגביר נזק)</li>
+        <li>סוכרת וסוכר גבוה (glycation)</li>
+        <li>שמנות בטנית, דלקתיות (CRP גבוה)</li>
+        <li>גנטיקה: FH (hypercholesterolemia משפחתי)</li>
+      </ul>
+    </div>
+    <div class="rf-card good">
+      <h5>⬇️ מגנים</h5>
+      <ul>
+        <li>HDL גבוה — "אשפאי" הכולסטרול</li>
+        <li>אומגה 3 — אנטי-דלקתי, מוריד TG</li>
+        <li>MUFA (שמן זית) — מוריד LDL</li>
+        <li>פעילות גופנית — מעלה HDL, מוריד BP</li>
+        <li>פוליפנולים (יין אדום, אוליב, ברוקולי)</li>
+        <li>סיבים תזונתיים — קושרים חומצות מרה</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- S8 MEDITERRANEAN DIET -->
+<div class="slide s8">
+  <div class="left">
+    <div class="slide-title">הדיאטה הים-תיכונית — המבוססת ביותר</div>
+    <div class="slide-sub">מחקר PREDIMED (2013): ירידה של 30% בסיכון ל-CVD — גדול מכל תרופה</div>
+    <div class="med-benefits">
+      <div class="mb"><div class="mi">🫒</div><div><h5>שמן זית — עמוד השדרה</h5><p>≥4 כפות ביום. MUFA + פוליפנולים (אולאוקנתל = אנטי-דלקתי כמו איבופרופן). Virgin Extra בלבד — פוליפנולים נהרסים בזיקוק.</p></div></div>
+      <div class="mb"><div class="mi">🐟</div><div><h5>דגים שמנים — 2+ פעמים בשבוע</h5><p>סלמון, מקרל, סרדינים. EPA+DHA: מורידים TG ב-25–30%, אנטי-דלקתי, מגנים על קצב הלב.</p></div></div>
+      <div class="mb"><div class="mi">🥜</div><div><h5>אגוזים ולוזים — חופן ביום</h5><p>PREDIMED: 30 גרם אגוזים/יום הפחיתו אירועי לב ב-28%. MUFA, PUFA, ויטמין E, מגנזיום.</p></div></div>
+      <div class="mb"><div class="mi">🫘</div><div><h5>קטניות — 3 פעמים בשבוע</h5><p>סיבים + חלבון + פחמימות מורכבות. Blue Zones — כולן צורכות שעועית יומיום.</p></div></div>
+    </div>
+  </div>
+  <div class="right">
+    <div class="olive-facts">
+      <h4>🫒 שמן זית</h4>
+      <div class="of-item"><div class="ofl">73% MUFA (חומצה אולאית)</div><p>מוריד LDL, מגן HDL, אנטי-דלקתי</p></div>
+      <div class="of-item"><div class="ofl">פוליפנולים: אולאוקנתל</div><p>מעכב COX-1/COX-2 — כמו אספירין טבעי</p></div>
+      <div class="of-item"><div class="ofl">חומצה אולאית ו-EVOO</div><p>Extra Virgin בלבד = אקסטרא פוליפנולים. עישון: 180°C — אל תחמם מעל</p></div>
+      <div class="of-item"><div class="ofl">ישראל: יצרנית ומייצאת עולם</div><p>זנים מקומיים: ברנע, סורי, ארבקינה. בדקו את ה-harvest date!</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- S9 OMEGA 3 DEEP -->
+<div class="slide s9">
+  <div class="slide-title">אומגה 3 לעומק — EPA, DHA, ALA</div>
+  <div class="slide-sub">שלושת חומצות השומן החשובות ביותר לבריאות — מקורות, תפקידים, ומינונים</div>
+  <div class="omega3-grid">
+    <div class="o3c"><div class="o3ico">🌿</div><h5>ALA — חומצה אלפא-לינולנית</h5><ul><li>הצורה הצמחית של אומגה 3</li><li>המרה לEPA: ~5–10%; ל-DHA: &lt;1%</li><li>עדיין בעל ערך ישיר (אנטי-דלקתי)</li><li>מקורות: זרעי פשתן, צ'יה, המפ, אגוזי מלך, שמן קנולה</li><li>המלצה: 1.1–1.6 גרם/יום (AI)</li></ul></div>
+    <div class="o3c"><div class="o3ico">🐟</div><h5>EPA — חומצה איקוסאפנטאנואית</h5><ul><li>אנטי-דלקתי חזק: מייצר resolvin ו-protectin</li><li>מוריד TG ב-15–30%</li><li>מפחית סיכון לאוטם שריר הלב</li><li>קשור לבריאות נפשית (דיכאון)</li><li>מקורות: דגים שמנים, שמן דגים, אצות</li></ul></div>
+    <div class="o3c"><div class="o3ico">🧠</div><h5>DHA — חומצה דוקוסהקסאנואית</h5><ul><li>15% ממשקל קליפת המוח</li><li>60% משומן הרשתית</li><li>חיונית לפיתוח מוח עוברי</li><li>מוריד TG, מגן על קצב לב</li><li>טבעוני: שמן אצות = DHA ישיר ממקור ראשוני</li></ul></div>
+  </div>
+  <div class="o3-note">📊 <strong>המלצות:</strong> AHA ממליצה 2 מנות דגים שמנים/שבוע ≈ 500 מ"ג EPA+DHA/יום. להורדת TG: 2–4 גרם EPA+DHA/יום (עם רופא). הריון: 200 מ"ג DHA/יום נוסף. <strong>טבעוניים:</strong> שמן אצות מספק DHA ישירות ממקור ראשוני (אין צורך דרך דגים).</div>
+</div>
+
+<!-- S10 FATS AND DISEASE -->
+<div class="slide s10">
+  <div class="slide-title">שומן ומחלות — מה אומרת הראיה?</div>
+  <div class="slide-sub">מחקרי עוקבה ומטה-אנליזות — מה קשור לסיכון, מה לא</div>
+  <div class="disease-grid">
+    <div class="dc"><div class="d-ico">❤️</div><h5>מחלות לב (CVD)</h5><p>שומן רווי → LDL גבוה → סיכון מוגבר (אם מחליף פחמימות). שומן טרנס: סיכון מוכח. MUFA, PUFA אומגה 3: הגנה. PREDIMED: EVOO מפחית אירועים ב-30%.</p><div class="d-verdict d-bad">שומן טרנס = נזק ודאי</div></div>
+    <div class="dc"><div class="d-ico">🧠</div><h5>אלצהיימר וקוגניציה</h5><p>DHA: חיוני למוח. מחסור קשור לירידה קוגניטיבית מהירה. MIND Diet (ים-תיכונית + DASH): מפחיתה סיכון ב-35–53%. שומן טרנס: מגביר סיכון.</p><div class="d-verdict d-good">DHA = מגן מוחי</div></div>
+    <div class="dc"><div class="d-ico">🎗️</div><h5>סרטן</h5><p>שמן זית: פוליפנולים = אנטי-סרטניים (ראיה ראשונית). שומן רווי מבשר מעובד: קשור לסרטן מעי גס. אין ראיה חזקה לשומן ושד בניגוד לאמונה הישנה.</p><div class="d-verdict d-neutral">קשר מורכב ומחלה-ספציפי</div></div>
+    <div class="dc"><div class="d-ico">🦴</div><h5>דלקת פרקים</h5><p>אומגה 3: מפחיתה דלקת ב-RA ב-30%. מורידה שימוש ב-NSAIDs. כמות טיפולית: 3–6 גרם EPA+DHA/יום. אומגה 6 עודפת: מגבירה איקוסנואידים דלקתיים.</p><div class="d-verdict d-good">אומגה 3 = אנטי-דלקתי</div></div>
+    <div class="dc"><div class="d-ico">🫀</div><h5>כבד שומני NAFLD</h5><p>עודף פרוקטוז + שומן רווי → DNL בכבד → הצטברות שומן. אומגה 3: מפחיתה שומן כבד. MUFA: ניטרלי-חיובי. מחקר: 3 גרם EPA+DHA פחתה NAFLD.</p><div class="d-verdict d-neutral">תזונה קריטית לכבד</div></div>
+    <div class="dc"><div class="d-ico">🩸</div><h5>סוכרת סוג 2</h5><p>שומן רווי: קשר לתנגודת אינסולין. MUFA: משפר רגישות לאינסולין. אומגה 3: ניטרלי על גלוקוז אך מגן CVD (קריטי בסוכרת). שומן טרנס: מגביר סיכון.</p><div class="d-verdict d-neutral">תלוי בסוג השומן</div></div>
+  </div>
+</div>
+
+<!-- S11 READING LABELS -->
+<div class="slide s11">
+  <div class="left">
+    <div class="slide-title">קריאת תוויות — שומן</div>
+    <div class="slide-sub">כיצד לזהות שומן טוב, רע, ומוסתר בתוויות תזונה</div>
+    <div class="label-tips">
+      <div class="lt"><div class="li">🔍</div><div><h5>בדקו סוג השומן — לא רק כמות</h5><p>"נמוך שומן" עלול להכיל הרבה שומן טרנס. תמיד בדקו "שומן טרנס" בנפרד.</p></div></div>
+      <div class="lt"><div class="li">⚠️</div><div><h5>שומן טרנס — אפס לא אומר אפס</h5><p>בחוק: אם &lt;0.5 גרם למנה → מותר לרשום "0 שומן טרנס". בדקו מרכיבים: "שמן מוקשה חלקית" = שומן טרנס!</p></div></div>
+      <div class="lt"><div class="li">🫒</div><div><h5>שמן זית Extra Virgin — בדקו harvest date</h5><p>פוליפנולים מתפרקים עם הזמן. אחרי שנה מהקטיף — פוליפנולים בחלק ניכר. קנו טרי ובבקבוק כהה.</p></div></div>
+      <div class="lt"><div class="li">🐟</div><div><h5>אומגה 3 — בדקו EPA+DHA ספציפית</h5><p>"מכיל אומגה 3" בתיוג = שיווקי בלבד. בדקו כמות EPA ו-DHA בנפרד על תווית תוספת.</p></div></div>
+    </div>
+  </div>
+  <div class="right">
+    <div class="oils-rank">
+      <h4>🏆 דירוג שמנים</h4>
+      <div class="oil-item"><span class="on">🫒 שמן זית EVOO</span><span class="osc osc-g">★★★★★</span></div>
+      <div class="oil-item"><span class="on">🥑 שמן אבוקדו</span><span class="osc osc-g">★★★★★</span></div>
+      <div class="oil-item"><span class="on">🌰 שמן קנולה</span><span class="osc osc-g">★★★★</span></div>
+      <div class="oil-item"><span class="on">🫘 שמן קוקוס</span><span class="osc osc-y">★★★</span></div>
+      <div class="oil-item"><span class="on">🌻 שמן חמניות</span><span class="osc osc-y">★★</span></div>
+      <div class="oil-item"><span class="on">🌽 שמן תירס</span><span class="osc osc-y">★★</span></div>
+      <div class="oil-item"><span class="on">🏭 שמן דקל</span><span class="osc osc-r">★</span></div>
+      <div class="oil-item"><span class="on">⚠️ מרגרינה ישנה</span><span class="osc osc-r">✗</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- S12 LIPID PANEL -->
+<div class="slide s12">
+  <div class="slide-title">פאנל שומנים בדם — כיצד לקרוא</div>
+  <div class="slide-sub">בדיקת דם לשומנים: כלי חיוני לניהול בריאות — כיצד לפרש ולשפר</div>
+  <div class="panel-grid">
+    <div class="pg hdl"><div class="pg-name">HDL</div><div class="pg-val">≥60</div><div class="pg-unit">mg/dL</div><div class="pg-range">מגן ♥</div></div>
+    <div class="pg ldl"><div class="pg-name">LDL</div><div class="pg-val">&lt;100</div><div class="pg-unit">mg/dL</div><div class="pg-range">תקין</div></div>
+    <div class="pg tg"><div class="pg-name">טריגליצרידים</div><div class="pg-val">&lt;150</div><div class="pg-unit">mg/dL</div><div class="pg-range">תקין</div></div>
+    <div class="pg tc"><div class="pg-name">כולסטרול כולל</div><div class="pg-val">&lt;200</div><div class="pg-unit">mg/dL</div><div class="pg-range">תקין</div></div>
+    <div class="pg nonhdl"><div class="pg-name">non-HDL</div><div class="pg-val">&lt;130</div><div class="pg-unit">mg/dL</div><div class="pg-range">מטרה</div></div>
+  </div>
+  <div class="med-tips">
+    <div class="mt raise"><h5>⬆️ כיצד להעלות HDL</h5><ul><li>פעילות אירובית: +5–10% HDL</li><li>הפסקת עישון: +5–15%</li><li>אומגה 3: +3–5%</li><li>אלכוהול מתון (שנוי במחלוקת)</li><li>ירידה במשקל: כל 3 ק"ג = +1 mg/dL HDL</li></ul></div>
+    <div class="mt lower"><h5>⬇️ כיצד להוריד LDL</h5><ul><li>הפחת שומן רווי + טרנס</li><li>הגדל MUFA (שמן זית)</li><li>סיבים מסיסים: בטא-גלוקן −5–10%</li><li>פיטוסטרולים (מרגרינה פונקציונלית)</li><li>ירידה במשקל + פעילות גופנית</li></ul></div>
+  </div>
+</div>
+
+<!-- S13 MYTHS -->
+<div class="slide s13">
+  <div class="slide-title">מיתוסים על שומן — מה המדע אומר?</div>
+  <div class="slide-sub">ארבע אמונות שגויות שעיצבו עשרות שנים של תזונה לקויה</div>
+  <div class="myths">
+    <div class="myth">
+      <div class="mt-top"><div class="mt-ico">❌</div><div class="mt-claim">"שומן רווי הוא הגורם העיקרי למחלות לב"</div></div>
+      <div class="truth">🔬 מסובך. מטה-אנליזה (Chowdhury 2014, Siri-Tarino 2010): לא נמצא קשר ישיר בין שומן רווי לCVD כשמחליפים אותו בפחמימות מזוקקות. מה שמחליף חשוב: PUFA עדיף. פחמימות מזוקקות — גרוע.</div>
+    </div>
+    <div class="myth">
+      <div class="mt-top"><div class="mt-ico">❌</div><div class="mt-claim">"ביצים מסוכנות בגלל הכולסטרול"</div></div>
+      <div class="truth">🔬 שגוי לבריאים. AHA ביטלה ב-2015 את מגבלת 300 מ"ג כולסטרול. כולסטרול תזונתי משפיע מעט — הכבד מפצה. ביצה = חלבון שלם, כולין, B12. 1–2 ביצים/יום: בטוח לבריאים.</div>
+    </div>
+    <div class="myth">
+      <div class="mt-top"><div class="mt-ico">❌</div><div class="mt-claim">"שמן קוקוס = סופר-פוד ומגן הלב"</div></div>
+      <div class="truth">🔬 מוגזם. שמן קוקוס: ~90% שומן רווי — מעלה LDL. יש MCT (שרשרת בינונית) שמתמצל מהר. AHA 2017: אינו מומלץ למחלות לב. EVOO ממדע PREDIMED: עדיפות ברורה. מתון — בסדר. לא "סופר-פוד".</div>
+    </div>
+    <div class="myth">
+      <div class="mt-top"><div class="mt-ico">❌</div><div class="mt-claim">"מרגרינה בריאה יותר מחמאה"</div></div>
+      <div class="truth">🔬 היה נכון פעם, כיום — מורכב. מרגרינה ישנה עם הידרוגנציה חלקית = שומן טרנס = גרוע מחמאה. מרגרינות חדשות (ללא trans) עם פיטוסטרולים: כן, עשויות להיות עדיפות. חמאה מחלב מרעה: כולל CLA ו-K2 — לא זהה לחמאה רגילה.</div>
+    </div>
+  </div>
+</div>
+
+<!-- S14 QUIZ -->
+<div class="slide s14">
+  <div class="slide-title">🧠 בדיקת הבנה</div>
+  <div class="slide-sub">לחצו על כרטיס לגלות את התשובה</div>
+  <div class="qgrid">
+    <div class="qc" onclick="this.classList.toggle('rev')"><div class="qn">שאלה 1</div><div class="qt">מדוע שומן טרנס מסוכן יותר משומן רווי, ומה מקורותיו?</div><div class="qa">שומן טרנס מעלה LDL (כמו שומן רווי) אך גם מוריד HDL — כפל הנזק. בנוסף: דלקתיות ועמידות לאינסולין. מקורות: מרגרינה ישנה, מאפים תעשייתיים, צ'יפס. זיהוי: "שמן מוקשה חלקית" ברשימת מרכיבים.</div></div>
+    <div class="qc" onclick="this.classList.toggle('rev')"><div class="qn">שאלה 2</div><div class="qt">מה ההבדל בין HDL ל-LDL ומדוע HDL "טוב"?</div><div class="qa">LDL מוביל כולסטרול מהכבד לרקמות — כשעודף, מצטבר בעורקים ← פלאק. HDL עושה ההפך: מפנה כולסטרול מהעורקים חזרה לכבד לסילוק — "אשפאי" הכולסטרול. לכן: HDL גבוה ≥60 נחשב גורם מגן עצמאי.</div></div>
+    <div class="qc" onclick="this.classList.toggle('rev')"><div class="qn">שאלה 3</div><div class="qt">מדוע יחס אומגה 6:3 חשוב, ומה הממוצע המערבי?</div><div class="qa">שתיהן מתחרות על אותם אנזימים. אומגה 6 עודפת (ארכידונית) → איקוסנואידים דלקתיים. אומגה 3 (EPA) → resolvin/protectin — אנטי-דלקתי. אבות: יחס 1:1–4:1. מערבי כיום: 15:1–20:1 בגלל שמנים תעשייתיים. עצה: הפחיתו שמן תירס/סויה, הגדילו דגים ואגוזי מלך.</div></div>
+    <div class="qc" onclick="this.classList.toggle('rev')"><div class="qn">שאלה 4</div><div class="qt">מה גילה מחקר PREDIMED ומה המשמעות המעשית?</div><div class="qa">PREDIMED (2013, ספרד, 7,447 נבדקים): דיאטה ים-תיכונית + 4 כפות שמן זית EVOO או + 30 גרם אגוזים/יום — הפחיתה אירועי CVD (התקף לב, שבץ, מוות) ב-30% לעומת דיאטה דלת-שומן. משמעות: שומן (הנכון!) מגן על הלב.</div></div>
+  </div>
+  <div class="qhint">💡 לחצו על כרטיס לגלות את התשובה</div>
+</div>
+
+<!-- S15 SUMMARY -->
+<div class="slide s15">
+  <div class="slide-title">סיכום שיעור 4</div>
+  <div class="slide-sub">שומן — לא אויב, אלא בעל ברית חיוני שצריך לבחור נכון</div>
+  <div class="sgrid">
+    <div class="si"><div class="sii">🧱</div><h5>שומן חיוני</h5><p>ממברנות תאים, ויטמינים A-D-E-K, הורמונים, מוח — 9 קל/גרם.</p></div>
+    <div class="si"><div class="sii">🟢</div><h5>MUFA ו-PUFA</h5><p>שמן זית, אבוקדו, דגים שמנים = מורידים LDL ומגנים. אלה השומנים הרצויים.</p></div>
+    <div class="si"><div class="sii">⚠️</div><h5>שומן טרנס — אסור</h5><p>מעלה LDL + מוריד HDL. בדקו "שמן מוקשה חלקית" ברשימות מרכיבים.</p></div>
+    <div class="si"><div class="sii">🐟</div><h5>אומגה 3</h5><p>EPA+DHA: אנטי-דלקתי, מוריד TG, מגן לב ומוח. 2 מנות דגים/שבוע.</p></div>
+    <div class="si"><div class="sii">💛</div><h5>HDL vs LDL</h5><p>HDL ≥60 = מגן. LDL &lt;100 = מטרה. פעילות גופנית + MUFA = הדרך.</p></div>
+    <div class="si"><div class="sii">🫒</div><h5>PREDIMED</h5><p>ים-תיכונית + EVOO + אגוזים = -30% CVD. הראיה הכי חזקה בתזונה.</p></div>
+  </div>
+  <div class="nxtbox">📌 שיעור הבא: <strong>תעשיית המזון ואיכות מזון</strong> — חומרים מוספים, עיבוד מזון, Ultra-processed foods (UPF), תעשיית המזון האורגני</div>
+</div>
+
+</div><!-- /deck -->
+
+<div class="nav">
+  <button id="prevBtn" onclick="go(-1)" disabled>→</button>
+  <div class="dots" id="dots"></div>
+  <div class="slide-counter" id="ctr">1 / 15</div>
+  <button id="nextBtn" onclick="go(1)">←</button>
+</div>
+<script>
+  let cur=0;
+  const deck=document.getElementById('deck');
+  const slides=deck.querySelectorAll('.slide');
+  const n=slides.length;
+  const dc=document.getElementById('dots');
+  const ctr=document.getElementById('ctr');
+  for(let i=0;i<n;i++){const d=document.createElement('div');d.className='dot'+(i===0?' active':'');d.onclick=()=>goTo(i);dc.appendChild(d);}
+  function goTo(i){if(i<0||i>=n)return;slides[cur].classList.remove('active');dc.children[cur].classList.remove('active');cur=i;slides[cur].classList.add('active');dc.children[cur].classList.add('active');ctr.textContent=(cur+1)+' / '+n;document.getElementById('prevBtn').disabled=cur===0;document.getElementById('nextBtn').disabled=cur===n-1;}
+  function go(d){goTo(cur+d);}
+  document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(1);if(e.key==='ArrowRight'||e.key==='ArrowDown')go(-1);});
+</script>
+</body>
+</html>
